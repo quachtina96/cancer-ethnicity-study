@@ -1,0 +1,9 @@
+id	filename	md5	size	state
+78cf09e0-3fa0-47c4-a996-bf9d44a3b3b5	TCGA.LUAD.varscan.78cf09e0-3fa0-47c4-a996-bf9d44a3b3b5.somatic.maf.gz	1fa54ea00cc62bb28a9230e68c684305	28924579	submitted
+5fed8489-4de1-4acf-9a7d-1f4d43e40032	TCGA.LUSC.varscan.5fed8489-4de1-4acf-9a7d-1f4d43e40032.somatic.maf.gz	de8c7657f28b8d85a2138d9515ec6d8c	26217414	submitted
+c6828a00-67e5-47e3-9386-a99add1dc181	TCGA.LUSC.muse.c6828a00-67e5-47e3-9386-a99add1dc181.somatic.maf.gz	9cc5a8a8b341c33fc6d0a3d245a9a8b7	26449229	submitted
+ea787780-9587-400c-8084-fa35297a15e8	TCGA.LUAD.mutect.ea787780-9587-400c-8084-fa35297a15e8.somatic.maf.gz	6fd1849f6245da9d81e9900cdef49335	36993000	submitted
+74e193ff-2f2c-4722-b12d-d3507626ee00	TCGA.LUSC.mutect.74e193ff-2f2c-4722-b12d-d3507626ee00.somatic.maf.gz	3a77ac4f5319fc6391bc4ded57817540	31265585	submitted
+3f4016c8-5f36-4d3f-8778-fc216cb8306e	TCGA.LUSC.somaticsniper.3f4016c8-5f36-4d3f-8778-fc216cb8306e.somatic.maf.gz	50d24e3aa391b98d6cb936f735cbcfe6	20266226	submitted
+f8f598d1-637a-4be2-82fa-1e4712c701b1	TCGA.LUAD.muse.f8f598d1-637a-4be2-82fa-1e4712c701b1.somatic.maf.gz	dacfed93c0cef3374eff922ceb985c1d	29536033	submitted
+f46bf63a-f636-4a4c-a512-5c446e83c01d	TCGA.LUAD.somaticsniper.f46bf63a-f636-4a4c-a512-5c446e83c01d.somatic.maf.gz	c99b8fcca791a9282d475725b63d0b32	21085414	submitted

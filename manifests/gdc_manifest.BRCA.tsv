@@ -1,0 +1,5 @@
+id	filename	md5	size	state
+09fe60b3-0dd8-411d-ad26-69a81410fb98	TCGA.BRCA.somaticsniper.09fe60b3-0dd8-411d-ad26-69a81410fb98.somatic.maf.gz	589ba9384d4733409204add070297e1d	9927702	submitted
+9408fdf2-013f-4c09-8821-a709af56b9ff	TCGA.BRCA.mutect.9408fdf2-013f-4c09-8821-a709af56b9ff.somatic.maf.gz	248338165b04c37b2d1c38d3e7c81869	20952602	submitted
+608b713a-e27d-4b68-8728-9b12c500c077	TCGA.BRCA.varscan.608b713a-e27d-4b68-8728-9b12c500c077.somatic.maf.gz	609fbd74a4e9f145b3248dc90096cf2f	13798814	submitted
+8751a889-cb3e-4487-ba6f-ac91651666e7	TCGA.BRCA.muse.8751a889-cb3e-4487-ba6f-ac91651666e7.somatic.maf.gz	c8c367bac1c9f3f134ed4a6a944dba9e	14152985	submitted

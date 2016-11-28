@@ -1,0 +1,13 @@
+id	filename	md5	size	state
+d01afe22-9edf-4b90-b812-ecb7bb021240	TCGA.KIRP.somaticsniper.d01afe22-9edf-4b90-b812-ecb7bb021240.somatic.maf.gz	5277e1f48c7b47b4a01eda1baba26dcc	3039087	submitted
+c2ff40fb-8452-4791-a19d-6861bf89a619	TCGA.KIRC.somaticsniper.c2ff40fb-8452-4791-a19d-6861bf89a619.somatic.maf.gz	7332a7897eaa3819b2d81e157dc11d41	2502002	submitted
+18188602-bc86-46ff-aff7-baff03114282	TCGA.KIRP.muse.18188602-bc86-46ff-aff7-baff03114282.somatic.maf.gz	48672191b3e55b23a26f82d168e05b3c	3314427	submitted
+d47b5be0-4a20-48bd-8cd9-0b768cae6e41	TCGA.KICH.somaticsniper.d47b5be0-4a20-48bd-8cd9-0b768cae6e41.somatic.maf.gz	14db9cf9a3681527a3cf842aa68b0f26	237875	submitted
+ae189e2a-6080-496b-bfb6-f02b6708b555	TCGA.KIRC.varscan.ae189e2a-6080-496b-bfb6-f02b6708b555.somatic.maf.gz	5b28812217aa4b4e38d40ab64fc93464	3298850	submitted
+0893802e-248b-4265-8736-652b8a1d5674	TCGA.KIRP.varscan.0893802e-248b-4265-8736-652b8a1d5674.somatic.maf.gz	f88907ee0631fe5619cd8f36bba41fcd	3942739	submitted
+f7aa19c6-369a-4fca-a0ce-a9142c947020	TCGA.KIRC.muse.f7aa19c6-369a-4fca-a0ce-a9142c947020.somatic.maf.gz	66c24fafb6d0ea5a9b01a15108f92f0e	3385060	submitted
+a05a7fd4-d309-4b61-9724-a021d6c45ccb	TCGA.KICH.muse.a05a7fd4-d309-4b61-9724-a021d6c45ccb.somatic.maf.gz	5732c5e4a6d75268fcef27e3e53de7d5	267332	submitted
+1497e310-36af-41c9-b057-efc4a10888c1	TCGA.KICH.varscan.1497e310-36af-41c9-b057-efc4a10888c1.somatic.maf.gz	a3d91b862c277d25eda2d407546a77ac	284927	submitted
+11d43e1f-1d0e-4c78-9c4e-942ce0e1e678	TCGA.KICH.mutect.11d43e1f-1d0e-4c78-9c4e-942ce0e1e678.somatic.maf.gz	8bc31cf3eb2d5c3bc49ebeeeda9175c3	386869	submitted
+aac3f913-ce14-4e70-81c2-00537e9a5128	TCGA.KIRC.mutect.aac3f913-ce14-4e70-81c2-00537e9a5128.somatic.maf.gz	997c88ea577c1d96332e52ced1fde857	4931698	submitted
+e1109178-f4f1-4e81-ba8f-5e671f089689	TCGA.KIRP.mutect.e1109178-f4f1-4e81-ba8f-5e671f089689.somatic.maf.gz	f1a8e04cbbcb14a4891f62a3b5e85316	5415645	submitted
