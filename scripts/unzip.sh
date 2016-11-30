@@ -3,7 +3,6 @@
 
 # Assumes that the data folder 
 cd ..
-cd ..
 cd gdc_data
 
 for sampleDir in *; do
