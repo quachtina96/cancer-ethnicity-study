@@ -10,10 +10,6 @@ import os
 from subprocess import call
 import json
 
-# Given a tumor sample ID and a file, query the Genomic Data Commons API to 
-# retrieve the data containing the tumor's corresponding case ID.
-tumor_sample_barcode = 'TCGA-OK-A5Q2-01A-11D-A27P-09'
-
 # Given a tumor_sample_barcode string, queries the Genomic Data Commons through their
 # API in order to retrieve the Case Id associated with the tumor sample barcode.
 def getCaseId(tumor_sample_barcode):
