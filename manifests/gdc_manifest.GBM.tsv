@@ -1,0 +1,5 @@
+id	filename	md5	size	state
+730ddd72-d57c-4bce-9d3c-c0dd57b03754	TCGA.GBM.muse.730ddd72-d57c-4bce-9d3c-c0dd57b03754.somatic.maf.gz	09a7136a5a8eaa7bfdb5e2e6c7be59e6	6498075	submitted
+1990e104-e991-40ac-8f98-906ebe695cee	TCGA.GBM.somaticsniper.1990e104-e991-40ac-8f98-906ebe695cee.somatic.maf.gz	cf73f1093c0382900bef566f7fc21012	5101383	submitted
+8e65c658-a9f8-402b-a24a-296b4425d93e	TCGA.GBM.varscan.8e65c658-a9f8-402b-a24a-296b4425d93e.somatic.maf.gz	85353abdde96e719545cf80c25f7b1bf	6389796	submitted
+06406727-4b6a-4665-8013-bd722da45045	TCGA.GBM.mutect.06406727-4b6a-4665-8013-bd722da45045.somatic.maf.gz	5e019244f435cf0f496168a5ce83c55e	13507583	submitted

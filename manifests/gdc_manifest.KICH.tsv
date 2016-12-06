@@ -1,0 +1,6 @@
+id	filename	md5	size	state
+d47b5be0-4a20-48bd-8cd9-0b768cae6e41	TCGA.KICH.somaticsniper.d47b5be0-4a20-48bd-8cd9-0b768cae6e41.somatic.maf.gz	14db9cf9a3681527a3cf842aa68b0f26	237875	submitted
+a05a7fd4-d309-4b61-9724-a021d6c45ccb	TCGA.KICH.muse.a05a7fd4-d309-4b61-9724-a021d6c45ccb.somatic.maf.gz	5732c5e4a6d75268fcef27e3e53de7d5	267332	submitted
+1497e310-36af-41c9-b057-efc4a10888c1	TCGA.KICH.varscan.1497e310-36af-41c9-b057-efc4a10888c1.somatic.maf.gz	a3d91b862c277d25eda2d407546a77ac	284927	submitted
+11d43e1f-1d0e-4c78-9c4e-942ce0e1e678	TCGA.KICH.mutect.11d43e1f-1d0e-4c78-9c4e-942ce0e1e678.somatic.maf.gz	8bc31cf3eb2d5c3bc49ebeeeda9175c3	386869	submitted
+

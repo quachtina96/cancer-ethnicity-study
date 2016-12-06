@@ -1,0 +1,5 @@
+id	filename	md5	size	state
+c2ff40fb-8452-4791-a19d-6861bf89a619	TCGA.KIRC.somaticsniper.c2ff40fb-8452-4791-a19d-6861bf89a619.somatic.maf.gz	7332a7897eaa3819b2d81e157dc11d41	2502002	submitted
+ae189e2a-6080-496b-bfb6-f02b6708b555	TCGA.KIRC.varscan.ae189e2a-6080-496b-bfb6-f02b6708b555.somatic.maf.gz	5b28812217aa4b4e38d40ab64fc93464	3298850	submitted
+f7aa19c6-369a-4fca-a0ce-a9142c947020	TCGA.KIRC.muse.f7aa19c6-369a-4fca-a0ce-a9142c947020.somatic.maf.gz	66c24fafb6d0ea5a9b01a15108f92f0e	3385060	submitted
+aac3f913-ce14-4e70-81c2-00537e9a5128	TCGA.KIRC.mutect.aac3f913-ce14-4e70-81c2-00537e9a5128.somatic.maf.gz	997c88ea577c1d96332e52ced1fde857	4931698	submitted

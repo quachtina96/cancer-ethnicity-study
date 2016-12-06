@@ -1,0 +1,6 @@
+id	filename	md5	size	state
+c3b3a9b3-6101-4776-aabe-a12954771ae2	TCGA.UCS.varscan.c3b3a9b3-6101-4776-aabe-a12954771ae2.somatic.maf.gz	250c7c39dbdf281bfd97f95037284347	1241981	submitted
+e0c5f2ea-af56-4b77-bf69-95b6329d35c1	TCGA.UCS.mutect.e0c5f2ea-af56-4b77-bf69-95b6329d35c1.somatic.maf.gz	b24677cb9d30321fdfc556c3a5edde8b	1489568	submitted
+55f34d65-a97c-47e6-a449-24005503ed1c	TCGA.UCS.muse.55f34d65-a97c-47e6-a449-24005503ed1c.somatic.maf.gz	88fe58f5fcccdbf63ece3e788ba12482	1287708	submitted
+7b6c9f0a-4931-4cd7-a86d-5aa4d81a0ae0	TCGA.UCS.somaticsniper.7b6c9f0a-4931-4cd7-a86d-5aa4d81a0ae0.somatic.maf.gz	57d4e0d7e40b82f17dc4e334baa0f414	1102833	submitted
+

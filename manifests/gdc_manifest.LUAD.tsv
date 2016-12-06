@@ -1,0 +1,5 @@
+id	filename	md5	size	state
+78cf09e0-3fa0-47c4-a996-bf9d44a3b3b5	TCGA.LUAD.varscan.78cf09e0-3fa0-47c4-a996-bf9d44a3b3b5.somatic.maf.gz	1fa54ea00cc62bb28a9230e68c684305	28924579	submitted
+ea787780-9587-400c-8084-fa35297a15e8	TCGA.LUAD.mutect.ea787780-9587-400c-8084-fa35297a15e8.somatic.maf.gz	6fd1849f6245da9d81e9900cdef49335	36993000	submitted
+f8f598d1-637a-4be2-82fa-1e4712c701b1	TCGA.LUAD.muse.f8f598d1-637a-4be2-82fa-1e4712c701b1.somatic.maf.gz	dacfed93c0cef3374eff922ceb985c1d	29536033	submitted
+f46bf63a-f636-4a4c-a512-5c446e83c01d	TCGA.LUAD.somaticsniper.f46bf63a-f636-4a4c-a512-5c446e83c01d.somatic.maf.gz	c99b8fcca791a9282d475725b63d0b32	21085414	submitted
