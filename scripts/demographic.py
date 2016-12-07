@@ -13,7 +13,7 @@ import json
 # Given a tumor_sample_barcode string, queries the Genomic Data Commons through their
 # API in order to retrieve the Case Id associated with the tumor sample barcode.
 def getCaseId(tumor_sample_barcode):
-	file = 'temp_case_id.txt'
+	file = tumor_sample_barcode + '_case_id.txt'
 
 	# Form the command (that you would normally type into the command line) to
 	# query the database and write the JSON response to a file
@@ -59,7 +59,7 @@ def createCasePayload(caseId):
 def getDemographicInfo(caseId):
 	payload_name = createCasePayload(caseId)
 	cases_endpoint = '"https://gdc-api.nci.nih.gov/cases"'
-	file = 'temp_demographic.txt'
+	file = caseId +'_demographic.txt'
 
 	get_demographic = 'curl -s --request POST --header "Content-Type: application/json" --data @' + payload_name + ' ' + cases_endpoint + ' | python -m json.tool > ' + file 
 	os.system(get_demographic)
@@ -104,14 +104,14 @@ def createTumorUUIDPayload(tumorUUID):
 def getDemographicFromTumorUuid(tumorUUID):
 	payload_name = createTumorUUIDPayload(tumorUUID)
 	cases_endpoint = '"https://gdc-api.nci.nih.gov/cases"'
-	file = 'temp_demographic.txt'
+	file = tumorUUID + '_demographic.txt'
 
 	get_demographic = 'curl -s --request POST --header "Content-Type: application/json" --data @' + payload_name + ' ' + cases_endpoint + ' | python -m json.tool > ' + file 
 	os.system(get_demographic)
 
-	# os.system('cat temp_demographic.txt')
 	# Parse the JSON response
 	demographic_query_output = open(file, 'r').read()
+	demographic_dict = None
 	try:
 		demographic_json = json.loads(demographic_query_output)
 	except: 
@@ -121,7 +121,7 @@ def getDemographicFromTumorUuid(tumorUUID):
 		demographic_dict = demographic_json["data"]["hits"][0]["demographic"]
 		del demographic_dict["demographic_id"]
 	except:
-		print "Unexpected error: Could not find demographic information for the case associated with the Tumor Sample UUID"
+		print "Unexpected error: Could not find demographic information for the case associated with the Tumor Sample UUID: %s" %(tumorUUID)
 	os.remove(file)
 	os.remove(payload_name)
 	return demographic_dict
