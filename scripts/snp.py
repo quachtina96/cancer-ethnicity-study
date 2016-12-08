@@ -191,7 +191,7 @@ if __name__ == '__main__':
     # parse command-line arguments
     if len(sys.argv) < 1:
         print "you must call program as:  "
-        print "   python ps1-dotplot.py <TUMOR_TYPE_DIR>"
+        print "   python snp.py <TUMOR_TYPE_DIR>"
         sys.exit(1)
     tumor_type_directory = sys.argv[1]
 
