@@ -1,9 +1,11 @@
 import numpy as np
+import csv
+
 # Each column is a patient ID
 # First column is a gene
 # Up to line 31 are unknown genes
 
-filename = 'data/BRCA/BRCA.txt'
+filename = '../data/BRCA/BRCA.txt'
 
 patients = None
 index = 0
@@ -27,7 +29,15 @@ with open(filename) as f:
 		index += 1
 
 data = np.loadtxt(filename, delimiter='\t', skiprows=num_skip, usecols=range(1,end_range))
-assert len(genes) == data.shape[0]
-assert len(patients) == data.shape[1]
+
+out = open('BRCA_RNA_patients.csv', 'wb')
+wr = csv.writer(out, quoting=csv.QUOTE_ALL)
+wr.writerow(patients)
 
 # Transpose matrix (row is patient, column is gene)
+data = data.transpose()
+
+assert len(genes) == data.shape[1]
+assert len(patients) == data.shape[0]
+
+np.save('BRCA_RNA_matrix.out', data)
