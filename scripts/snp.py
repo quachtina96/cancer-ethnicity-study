@@ -31,7 +31,7 @@ def readMaf(filename):
             Tumor_Sample_Barcode
             Tumor_Sample_UUID"""
     column_indices = [0,4,5,15,32]
-    snp_data = np.genfromtxt(filename, delimiter='\t', dtype=None, skiprows=1, names=True, usecols=column_indices)
+    snp_data = np.genfromtxt(filename, delimiter='\t', dtype=None, skip_header=1, names=True, usecols=column_indices)
     return snp_data
 
 def mapBarcodeToSnp(dictionary, snp_data, opt_snpSet):
@@ -125,7 +125,7 @@ def formMatrix(snpSet, sample_to_snps, barcode_to_uuid_map, empty_file):
     if os.stat(empty_file).st_size != 0:
         raise ValueError("Filename provided does not refer to empty file.")
     
-    labels = ['Hugo_Symbol','Patient_Barcode'] + [str(snp) for snp in snps] + ['Race', 'Ethnicity']    
+    labels = ['Patient_Barcode'] + [str(snp) for snp in snps] + ['Race', 'Ethnicity']    
     output_file.write('\t'.join(labels))
     output_file.write('\n')
 
@@ -168,16 +168,16 @@ def processMAF(maf_file_list, matrix_filename):
     snpSet = set()
     print "Reading in SNP MAF files..."
 
-    barcode_hugo_files = []
+    # barcode_hugo_files = []
     for maf in maf_file_list:
         snp_data = readMaf(maf)
         mapPatientBarcodeToUUID(barcode_to_uuid_map, snp_data)
         mapBarcodeToSnp(sample_to_snps, snp_data, snpSet)
 
-        maf_id = maf.split('.')[:4]
-        filename = 'barcode_hugo_'+ '.'.join(maf_id) + '.txt'
-        getPatientBarcodeHugoSymbolPairs(snp_data, filename)
-        barcode_hugo_files.append(filename)
+        #maf_id = maf.split('.')[:4]
+        #filename = 'barcode_hugo_'+ '.'.join(maf_id) + '.txt'
+        #getPatientBarcodeHugoSymbolPairs(snp_data, filename)
+        #barcode_hugo_files.append(filename)
 
     # Filter SNPs and return a dictionary mapping samples to SNPs that meet the 
     # threshold.
