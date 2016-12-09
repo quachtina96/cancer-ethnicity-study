@@ -22,12 +22,15 @@ def readSNPMatrix(matrix_file):
 	return (labels, data)
 
 def random_forest(matrix_path):
+	# matrix_path = '../../gdc_data/BRAIN/GBM/GBM.tsv'
 	with open(matrix_path, 'r') as f:
 		labels = f.readline().strip().split('\t')
 
 	col_indices = range(1,len(labels)-2)
+	print "Getting Patient Barcodes..."
 	patient_barcodes = np.genfromtxt(matrix_path, delimiter='\t',usecols=[0], dtype=None,names=True)
-	data = np.genfromtxt(matrix_path, delimiter='\t',usecols=col_indices, dtype=None,names=True)   
+	print "Reading in SNP Data..."
+	data = np.array(np.genfromtxt(matrix_path, delimiter='\t',usecols=col_indices, dtype=None,names=True))
 	race = np.genfromtxt(matrix_path, delimiter='\t',usecols=[len(labels)-2], dtype=None,names=True)   
 	ethnicity = np.genfromtxt(matrix_path, delimiter='\t',usecols=[len(labels)-1], dtype=None,names=True)   
 	random_forest = RandomForestClassifier(n_estimators=15, oob_score=True)

@@ -25,11 +25,12 @@ def readMaf(filename):
 
     Returns:
         An array of tuples with the following attributes in order:
+            Hugo_Symbol
             Chromosome
             Start_Position
             Tumor_Sample_Barcode
             Tumor_Sample_UUID"""
-    column_indices = [4,5,15,32]
+    column_indices = [0,4,5,15,32]
     snp_data = np.genfromtxt(filename, delimiter='\t', dtype=None, skiprows=1, names=True, usecols=column_indices)
     return snp_data
 
@@ -42,13 +43,14 @@ def mapBarcodeToSnp(dictionary, snp_data, opt_snpSet):
             and SNPs.
         snp_data: a 1-D numpy array of tuples with the following attributes in 
             order:
+                Hugo_Symbol
                 Chromosome
                 Start_Position
                 Tumor_Sample_Barcode
                 Tumor_Sample_UUID"""
     for snp in snp_data:
-        snp_loc = (snp[0], snp[1]) # (Chromosome, Start_Position)
-        tumor_sample_barcode = snp[2]
+        snp_loc = (snp[0], snp[1], snp[2]) # (Chromosome, Start_Position)
+        tumor_sample_barcode = snp[3]
         patient_barcode = '-'.join(tumor_sample_barcode.split('-')[:4])
         dictionary[patient_barcode][snp_loc] += 1
         if type(opt_snpSet) == set:
@@ -123,7 +125,7 @@ def formMatrix(snpSet, sample_to_snps, barcode_to_uuid_map, empty_file):
     if os.stat(empty_file).st_size != 0:
         raise ValueError("Filename provided does not refer to empty file.")
     
-    labels = ['Patient_Barcode'] + [str(snp) for snp in snps] + ['Race', 'Ethnicity']    
+    labels = ['Hugo_Symbol','Patient_Barcode'] + [str(snp) for snp in snps] + ['Race', 'Ethnicity']    
     output_file.write('\t'.join(labels))
     output_file.write('\n')
 
@@ -165,10 +167,17 @@ def processMAF(maf_file_list, matrix_filename):
 
     snpSet = set()
     print "Reading in SNP MAF files..."
+
+    barcode_hugo_files = []
     for maf in maf_file_list:
         snp_data = readMaf(maf)
         mapPatientBarcodeToUUID(barcode_to_uuid_map, snp_data)
         mapBarcodeToSnp(sample_to_snps, snp_data, snpSet)
+
+        maf_id = maf.split('.')[:4]
+        filename = 'barcode_hugo_'+ '.'.join(maf_id) + '.txt'
+        getPatientBarcodeHugoSymbolPairs(snp_data, filename)
+        barcode_hugo_files.append(filename)
 
     # Filter SNPs and return a dictionary mapping samples to SNPs that meet the 
     # threshold.
@@ -187,6 +196,7 @@ def processMAF(maf_file_list, matrix_filename):
     
     return matrix
 
+
 if __name__ == '__main__':
     # parse command-line arguments
     if len(sys.argv) < 1:
@@ -203,7 +213,7 @@ if __name__ == '__main__':
                 maf_list.append(os.path.join(root, file))
                 print os.path.join(root, file)
     
-    matrix_filename = tumor_type_directory.split('/')[-1] + '.tsv'
+    matrix_filename = tumor_type_directory.split('/')[-1] + '_snp_matrix.tsv'
     matrix_filepath = tumor_type_directory + "/"+ matrix_filename
 
     print "Processing MAF files..."
