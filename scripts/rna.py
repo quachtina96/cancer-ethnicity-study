@@ -25,7 +25,7 @@ def save_rna_matrix(filename):
 				if gene_id[0] != "?":
 					if num_skip == None:
 						num_skip = index
-					genes.append(gene_id)
+					genes.append(gene_id.split('|')[0])
 			index += 1
 
 	data = np.loadtxt(filename, delimiter='\t', skiprows=num_skip, usecols=range(1,end_range))
@@ -33,6 +33,10 @@ def save_rna_matrix(filename):
 	out = open(filename + '.patients.csv', 'wb')
 	wr = csv.writer(out, quoting=csv.QUOTE_ALL)
 	wr.writerow(patients)
+
+	gene_out = open(filename + '.genes.csv', 'wb')
+	gr = csv.writer(gene_out, quoting=csv.QUOTE_ALL)
+	gr.writerow(genes)
 
 	# Transpose matrix (row is patient, column is gene)
 	#data = data.transpose()
