@@ -15,10 +15,12 @@ def save_rna_matrix(filename):
 
 	with open(filename) as f:
 		for line in f:
+			# Get patient IDs
 			if index == 0:
 				patients = line.split("\t")[1:]
 				end_range = len(patients) + 1
 
+			# Get gene IDs
 			if index > 1:
 				parts = line.split("\t")
 				gene_id = parts[0]
