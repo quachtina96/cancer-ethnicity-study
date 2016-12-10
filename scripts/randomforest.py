@@ -56,49 +56,38 @@ if __name__ == '__main__':
 	fitted = random_forest.fit(snp_data,races)
 	tree_depths = [estimator.tree_.max_depth for estimator in fitted.estimators_]
 
-	fittedInfoDict = defaultdict(dict)
-
 	print "RandomForestClassifier statistics:"
 	print "Classes: %s" %(str(fitted.classes_))
 	print "OOB Score: %f" %(fitted.oob_score_)
 	print "Number of Outputs: %d" %(fitted.n_outputs_)
 
-	classifier_interests = {'Feature Importance': fitted.feature_importances_,'Tree Depths':tree_depths}
-	for interest in classifier_interests:
-		classifier_interests[interest]
-		fittedInfoDict['Max ' + interest] = max(classifier_interests[interest])
-		fittedInfoDict['Min ' + interest] = min(classifier_interests[interest])
-		fittedInfoDict['Median ' + interest] = min(classifier_interests[interest])
-		fittedInfoDict['Mean ' + interest] = min(classifier_interests[interest])
+	fitted_attributes = {'Feature Importance': fitted.feature_importances_,'Tree Depths':tree_depths}
+	fittedInfoDict = defaultdict(dict)
+	for interest in fitted_attributes:
+		fittedInfoDict[interest]['Max'] = max(fitted_attributes[interest])
+		fittedInfoDict[interest]['Min'] = min(fitted_attributes[interest])
+		fittedInfoDict[interest]['Median'] = min(fitted_attributes[interest])
+		fittedInfoDict[interest]['Mean'] = min(fitted_attributes[interest])
 
-	# Get Tree Depths 
 	for attribute in fittedInfoDict:
-		print "%s: %s" %(attribute, str(fittedInfoDict[attribute]))
+		for stat in attribute:
+			print "%s: %f" %(stat, attribute[stat])
 	
 	# Analyze feature importance to get the best
-	print "The Most Important SNPS"
+	print "The Most Important SNPs"
 	most_important_indices = fitted.feature_importances_.argsort()[-10:]
-	sorted_important_indices = 
-	for indices in most_important_indices[::-1]:
+	sorted_important_indices = most_important_indices[::-1]
+	for indices in sorted_important_indices:
 		print ('%f %s') %(fitted.feature_importances_[indices], labels[indices+1])
 	
 	# Create barplot of the SNPS and the feature importances
-	objects = labels[[index + 1 for index in most_important_indices[::-1]]]
-	y_pos = fitted.feature_importances_[most_important_indiceis[]
+	snps = labels[[index + 1 for index in sorted_important_indices]]
+	y_pos = np.arange(len(snps))
+	importances = fitted.feature_importances_[sorted_important_indices]
 
-performance = [10,8,6,4,2,1]
- 
-plt.bar(y_pos, performance, align='center', alpha=0.5)
-plt.xticks(y_pos, objects)
-plt.ylabel('Usage')
-plt.title('Programming language usage')
- 
-plt.show()]
-performance = [10,8,6,4,2,1]
- 
-plt.bar(y_pos, performance, align='center', alpha=0.5)
-plt.xticks(y_pos, objects)
-plt.ylabel('Usage')
-plt.title('Programming language usage')
- 
-plt.show()
+	plt.bar(y_pos, importances, align='center', alpha=0.5)
+	plt.xticks(y_pos, snps)
+	plt.ylabel('Feature Importances')
+	plt.title('Feature Importances of top 10 SNPs')
+	plt.savefig(matrix_path +'_barplot.png')
+
