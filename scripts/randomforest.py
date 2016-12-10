@@ -40,7 +40,7 @@ if __name__ == '__main__':
 	# snp_matrix from being a np.array of tuples to np.array of lists (which has
 	# the correct shape for analysis).
 	# if not line['Race'] try line[-2]
-	filtered = np.array([list(line) for line in snp_matrix if line['Race'] != 'not reported'])
+	filtered = np.array([list(line) if line['Race'] != 'not reported' for line in snp_matrix])
 	print filtered.shape
 
 	snp_data = filtered[:,1:-2]
