@@ -12,59 +12,71 @@ import subprocess
 import sys
 from sklearn.ensemble import RandomForestClassifier
 
-def readSNPMatrix(matrix_file):
-	# Read the Patient_Barcode, first 4 SNP data, the Race, and the Ethnicity
-	# fields.
-	with open(matrix_file, 'r') as f:
-		labels = f.readline().strip().split('\t')
+if __name__ == '__main__':
+	# parse command-line arguments
+	if len(sys.argv) < 1:
+		print "you must call program as:  "
+		print "   python randomforest.py <matrix_dir>"
+		sys.exit(1)
+	directory = sys.argv[1]
 
-	data = np.genfromtxt(matrix_file, delimiter='\t', dtype=None,names=True)
-	return (labels, data)
+	matrix_list = []
+	print "List of Matrix TSV files using for Random Forest analysis..."
+	for root, dirs, files in os.walk(directory):
+		for file in files:
+			if file.endswith(".tsv"):
+				print file
+				matrix_list.append(os.path.join(root, file))
+				print os.path.join(root, file)
+	
+	matrix_path = matrix_list[0]
+	matrix_filename = matrix_path.split('/')[-1]
+	
+	snp_matrix = np.genfromtxt(matrix_path, delimiter='\t', dtype=None,names=True)
+	print "shapes"
+	print snp_matrix.shape
+	# Filter out the snp_matrix such that only elements that have specified
+	# races are included in the classification. At the same time convert 
+	# snp_matrix from being a np.array of tuples to np.array of lists (which has
+	# the correct shape for analysis).
+	# if not line['Race'] try line[-2]
+	filtered = np.array([list(line) for line in snp_matrix if line['Race'] != 'not reported'])
+	print filtered.shape
 
-def random_forest(matrix_path):
-	# matrix_path = '../../gdc_data/BRAIN/GBM/GBM.tsv'
-	with open(matrix_path, 'r') as f:
-		labels = f.readline().strip().split('\t')
+	snp_data = filtered[:,1:-2]
+	print snp_data.shape
+	races = filtered[:,-2]
+	print races.shape
 
-	col_indices = range(1,len(labels)-2)
-	print "Getting Patient Barcodes..."
-	patient_barcodes = np.genfromtxt(matrix_path, delimiter='\t',usecols=[0], dtype=None,names=True)
-	print "Reading in SNP Data..."
-	data = np.array(np.genfromtxt(matrix_path, delimiter='\t',usecols=col_indices, dtype=None,names=True))
-	race = np.genfromtxt(matrix_path, delimiter='\t',usecols=[len(labels)-2], dtype=None,names=True)   
-	ethnicity = np.genfromtxt(matrix_path, delimiter='\t',usecols=[len(labels)-1], dtype=None,names=True)   
-	random_forest = RandomForestClassifier(n_estimators=15, oob_score=True)
-	fitted_random_forest = random_forest.fit(data, race.reshape(-1, 1))
-	return fitted_random_forest
+	print 'Training RandomForestClassification on given data'
+	#TODO: make this nonverbose
+	random_forest = RandomForestClassifier(n_estimators=1000, oob_score=True, n_jobs=-1, verbose=1)
+	fitted = random_forest.fit(snp_data,race)
+	tree_depths = [estimator.tree_.max_depth for estimator in fitted.estimators_]
 
-# if __name__ == '__main__':
-#     # parse command-line arguments
- #    if len(sys.argv) < 1:
- #        print "you must call program as:  "
- #        print "   python randomforest.py <matrix_dir>"
- #        sys.exit(1)
- #    directory = sys.argv[1]
+	fittedInfoDict = defaultdict(dict)
 
- #    matrix_list = []
- #    print "List of Matrix TSV files using for Random Forest analysis..."
- #    for root, dirs, files in os.walk(directory):
- #        for file in files:
- #            if file.endswith(".tsv"):
- #            	print file
- #                matrix_list.append(os.path.join(root, file))
- #                print os.path.join(root, file)
-    
- #    matrix_path = matrix_list[0]
- #    matrix_filename = matrix.split('/')[-1]
-    
- #    with open(matrix_path, 'r') as f:
-	# 	labels = f.readline().strip().split('\t')
+	print "RandomForestClassifier statistics:"
+	print "Classes: %s" %(str(fitted.classes_))
+	print "OOB Score: %d" %(fitted.oob_score_)
+	print "Number of Outputs: %d" %(fitted.n_outputs_)
 
-	# col_indices = range(1,len(labels)-2)
-	# patient_barcodes = np.genfromtxt(matrix_file, delimiter='\t',usecols=[0], dtype=None,names=True)
-	# data = np.genfromtxt(matrix_file, delimiter='\t',usecols=col_indices, dtype=None,names=True)   
-	# race = np.genfromtxt(matrix_file, delimiter='\t',usecols=[len(labels-2)], dtype=None,names=True)   
-	# ethnicity = np.genfromtxt(matrix_file, delimiter='\t',usecols=[len(labels-1)], dtype=None,names=True)   
+	classifier_interests = {'Feature Importance': fitted.feature_importances_,'Tree Depths':tree_depths}
+	for interest in classifier_interests:
+		classifier_interests[interest]
+		fittedInfoDict['Max ' + interest] = max(classifier_interests[interest])
+		fittedInfoDict['Min ' + interest] = min(classifier_interests[interest])
+		fittedInfoDict['Median ' + interest] = min(classifier_interests[interest])
+		fittedInfoDict['Mean ' + interest] = min(classifier_interests[interest])
 
- #    random_forest = RandomForestClassifier(n_estimators=15, oob_score=True)
-	# fitted_random_forest = random_forest.fit(data, race)
+	# Get Tree Depths 
+	for attribute in fittedInfoDict:
+		print "%s: %s" %(attribute, str(fittedInfoDict[attribute]))
+	
+	# Analyze feature importance to get the best
+	print "The Most Important SNPS"
+	most_important_indices = fitted.feature_importances_.argsort()[-10:]
+	least_to_most = fitted.feature_importances_[most_important_indices]
+	for snp in least_to_most[::-1]:
+		print snp
+
