@@ -1,0 +1,31 @@
+List of Matrix TSV files using for Random Forest analysis...
+KIRP_snp_matrix.tsv
+../data/gdc_data/KIDNEY/KIRP/KIRP_snp_matrix.tsv
+Number of patients before filtering those without reported races: 289
+Number of patients after filtering: 274
+Number of SNPs considered: 29756
+Training RandomForestClassification on given data
+RandomForestClassifier statistics:
+Classes: ['american indian or alaska native' 'asian' 'black or african american'
+ 'white']
+OOB Score: 0.744526
+Number of Outputs: 1
+Max: 0.002858
+Mean: 0.000000
+Median: 0.000000
+Min: 0.000000
+Max: 172.000000
+Mean: 39.000000
+Median: 39.000000
+Min: 39.000000
+The Most Important SNPs
+0.002858 KIAA1109_chr4_122343498
+0.002456 TMEM2_chr9_71685763
+0.002401 STON2_chr14_81396111
+0.002309 TDRD1_chr10_114218472
+0.002063 SMPD4_chr2_130173551
+0.001976 BPIFB2_chr20_33020377
+0.001955 LRP1_chr12_57195738
+0.001930 ASS1P4_chrX_3367678
+0.001922 LYZL6_chr17_35934840
+0.001896 FBXW2_chr9_120764775

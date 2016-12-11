@@ -35,7 +35,6 @@ if __name__ == '__main__':
 	
 	snp_matrix = np.genfromtxt(matrix_path, delimiter='\t', dtype=None,names=True)
 	labels = snp_matrix.dtype.names
-	print labels
 	print "Number of patients before filtering those without reported races: %d" %(snp_matrix.shape[0])
 	
 	# Filter out the snp_matrix such that only elements that have specified
@@ -51,7 +50,6 @@ if __name__ == '__main__':
 	races = filtered[:,-2]	
 
 	print 'Training RandomForestClassification on given data'
-	#TODO: make this nonverbose
 	random_forest = RandomForestClassifier(n_estimators=1000, oob_score=True, n_jobs=-1, verbose=1)
 	fitted = random_forest.fit(snp_data,races)
 	tree_depths = [estimator.tree_.max_depth for estimator in fitted.estimators_]
@@ -70,24 +68,31 @@ if __name__ == '__main__':
 		fittedInfoDict[interest]['Mean'] = min(fitted_attributes[interest])
 
 	for attribute in fittedInfoDict:
-		for stat in attribute:
-			print "%s: %f" %(stat, attribute[stat])
+		attributeInfo = fittedInfoDict[attribute]
+		for stat in attributeInfo:
+			print "%s: %f" %(stat, attributeInfo[stat])
 	
 	# Analyze feature importance to get the best
 	print "The Most Important SNPs"
+	snp_labels = []
 	most_important_indices = fitted.feature_importances_.argsort()[-10:]
 	sorted_important_indices = most_important_indices[::-1]
 	for indices in sorted_important_indices:
 		print ('%f %s') %(fitted.feature_importances_[indices], labels[indices+1])
-	
-	# Create barplot of the SNPS and the feature importances
-	snps = labels[[index + 1 for index in sorted_important_indices]]
-	y_pos = np.arange(len(snps))
-	importances = fitted.feature_importances_[sorted_important_indices]
+		snp_labels.append(labels[indices+1])
 
-	plt.bar(y_pos, importances, align='center', alpha=0.5)
-	plt.xticks(y_pos, snps)
-	plt.ylabel('Feature Importances')
-	plt.title('Feature Importances of top 10 SNPs')
-	plt.savefig(matrix_path +'_barplot.png')
+	# Write all feature importances and SNPs to a file
+	np.save(matrix_path + '_RF_feature_importance', fitted.feature_importances_)
+	np.save(matrix_path + '_snps', labels[1:-2])
+	np.save(matrix_path, snp_matrix)
+
+	# Create barplot of the SNPS and the feature importances
+	# y_pos = np.arange(len(snp_labels))
+	# importances = fitted.feature_importances_[sorted_important_indices]
+
+	# plt.bar(y_pos, importances, align='center', alpha=0.5)
+	# plt.xticks(y_pos, snp_labels)
+	# plt.ylabel('Feature Importances')
+	# plt.title('Feature Importances of top 10 SNPs')
+	# plt.savefig(matrix_path +'_barplot.png')
 
