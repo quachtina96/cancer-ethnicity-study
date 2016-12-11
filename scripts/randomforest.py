@@ -13,6 +13,7 @@ import sys
 from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
 import pickle
+from feature_importance import FeatureImportances
 
 class RandomForest:
 	def __init__(self):
@@ -47,31 +48,37 @@ class RandomForest:
 	def iterfit(self, data, classes):
 		pass
 
-	def analyze(self):
+	def quick_stats(self):
 		print "Classes: %s" %(str(self.classifier.classes_))
 		print "OOB Score: %f" %(self.classifier.oob_score_)
 		print "Number of Outputs: %d" %(self.classifier.n_outputs_)
 
-		fitted_attributes = {'Feature Importance': self.classifier.feature_importances_,'Tree Depths':self.get_tree_depths()}
-		fittedInfoDict = defaultdict(dict)
-		for interest in fitted_attributes:
-			fittedInfoDict[interest]['Max'] = max(fitted_attributes[interest])
-			fittedInfoDict[interest]['Min'] = min(fitted_attributes[interest])
-			fittedInfoDict[interest]['Median'] = min(fitted_attributes[interest])
-			fittedInfoDict[interest]['Mean'] = min(fitted_attributes[interest])
+	def analyze_tree_depths(self):
+		tree_depths = self.get_tree_depths()
+		tree_depth_stats = defaultdict(float)
+		tree_depth_stats['Max'] = max(tree_depths)
+		tree_depth_stats['Min'] = min(tree_depths)
+		tree_depth_stats['Median'] = min(tree_depths)
+		tree_depth_stats['Mean'] = min(tree_depths)
+		return tree_depth_stats
 
-		for attribute in fittedInfoDict:
-			attributeInfo = fittedInfoDict[attribute]
-			for stat in attributeInfo:
-				print "%s: %f" %(stat, attributeInfo[stat])
-		return fittedInfoDict
-
+		
 if __name__ == '__main__':
 	# parse command-line arguments
+	def display_help_message():
+
 	if len(sys.argv) < 1:
 		print "you must call program as:  "
 		print "   python randomforest.py <matrix_dir>  <matrix_type>"
+		print "   or "
+		print "   python randomforest.py -h"
 		sys.exit(1)
+
+	if (sys.argv[1] == '-h'):
+		# Display help message
+		print "python randomforest.py <matrix_dir>  <matrix_type>"
+		print "   matrix_dir: path to the directory containing the matrix to train on. "
+		print "   matrix_type: type of matrix ('snp')"
 	directory = sys.argv[1]
 	matrix_type = sys.argv[2]
 
@@ -87,7 +94,7 @@ if __name__ == '__main__':
 	if matrix_type == 'snp':
 		# Read SNP Matrix
 		snp_matrix = np.genfromtxt(matrix_path, delimiter='\t', dtype=None,names=True)
-		labels = snp_matrix.dtype.names
+		labels = snp_matrix.dtype.names[1:-2]
 		print "Number of patients before filtering those without reported races: %d" %(snp_matrix.shape[0])
 		
 		# Filter out the snp_matrix such that only elements that have specified
@@ -101,44 +108,39 @@ if __name__ == '__main__':
 		data = filtered[:,1:-2]
 
 		print "Number of SNPs considered: %d" %(data.shape[1])
-		races = filtered[:,-2]	
+		races = filtered[:,-2]
+		classes = races	
 
 	print 'Training RandomForestClassifier on given data...'
-	rf = RandomForest(data,races)
+	rf = RandomForest(data, classes)
 
 	print 'Saving the classifier...'
 	p_file = open('/'.join(matrix_path.split('/')[:-1]) +'classifier.RF.p','w')
 	rf.save(p_file)
 
 	# Analyze Classifier
-	fittedInfoDict = rf.analyze()
-	for attribute in fittedInfoDict:
-		print attribute
-		attributeInfo = fittedInfoDict[attribute]
-		for stat in attributeInfo:
-			print "%s: %f" %(stat, attributeInfo[stat])
+	rf.quick_stats()
+	tree_depth_stats = rf.analyze_tree_depth()
 	
-	# Analyze feature importance to get the best
-	print "The Most Important SNPs"
-	snp_labels = []
-	most_important_indices = fitted.feature_importances_.argsort()[-10:]
-	sorted_important_indices = most_important_indices[::-1]
-	for indices in sorted_important_indices:
-		print ('%f %s') %(fitted.feature_importances_[indices], labels[indices+1])
-		snp_labels.append(labels[indices+1])
-
 	# Write all feature importances and SNPs to a file
 	np.save(matrix_path + '_RF_feature_importance', fitted.feature_importances_)
-	np.save(matrix_path + '_snps', labels[1:-2])
+	np.save(matrix_path + '_snps', labels)
 	np.save(matrix_path, snp_matrix)
 
-	# Create barplot of the SNPS and the feature importances
-	# y_pos = np.arange(len(snp_labels))
-	# importances = fitted.feature_importances_[sorted_important_indices]
+	fi = FeatureImportances()
+	fi.set_importances(rf.classifier.feature_importances_)
+	fi.set_labels(labels)
+	fi_stats = fi.get_stats()
 
-	# plt.bar(y_pos, importances, align='center', alpha=0.5)
-	# plt.xticks(y_pos, snp_labels)
-	# plt.ylabel('Feature Importances')
-	# plt.title('Feature Importances of top 10 SNPs')
-	# plt.savefig(matrix_path +'_barplot.png')
-
+	# Print out analysis of tree depths
+	for stat_dict in {'Tree_Depth': tree_depth_stats, 'Feature Importances': fi_stats}:
+		print attribute
+		stats = fittedInfoDict[attribute]
+		for stat in stats:
+			print "%s: %f" %(stat, stats[stat])
+	
+	# Analyze feature importance to get the best
+	print "The " + n_features + "Most Important SNPs"
+	n_features = 10
+	feature_to_importance = fi.get_feature_importance_map(10)
+	fi.pretty_print_map(10)
