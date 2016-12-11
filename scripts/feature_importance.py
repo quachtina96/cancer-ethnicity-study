@@ -69,6 +69,14 @@ class FeatureImportances:
 			# reverse the sort
 			indices = indices[::-1]
 		return indices
+	
+	def get_least_important_features_indices(self, n_features, sorted_greatest_to_least=True):
+		# sorted least_to_greatest
+		indices = self.numpy_array.argsort()[:n_features]
+		if sorted_greatest_to_least:
+			# reverse the sort
+			indices = indices[::-1]
+		return indices
 			
 	def pretty_print_map(self, n_features):
 		sorted_important_indices = self.get_most_important_features_indices(n_features)

@@ -66,18 +66,19 @@ if __name__ == '__main__':
 	# parse command-line arguments
 	if len(sys.argv) < 1:
 		print "you must call program as:  "
-		print "   python randomforest.py <matrix_dir>  <matrix_type>"
+		print "   python randomforest.py <matrix_dir>  <matrix_type> <n_features>"
 		print "   or "
 		print "   python randomforest.py -h"
 		sys.exit(1)
 
 	if (sys.argv[1] == '-h'):
 		# Display help message
-		print "python randomforest.py <matrix_dir>  <matrix_type>"
+		print "python randomforest.py <matrix_dir>  <matrix_type> <n_features>"
 		print "   matrix_dir: path to the directory containing the matrix to train on. "
 		print "   matrix_type: type of matrix ('snp')"
 	directory = sys.argv[1]
 	matrix_type = sys.argv[2]
+	n_features = sys.argv[3]
 
 	print "Conducting Random Forest analysis..."
 	for root, dirs, files in os.walk(directory):
@@ -141,7 +142,6 @@ if __name__ == '__main__':
 			print "%s: %f" %(stat, stats[stat])
 	
 	# Analyze feature importance to get the best
-	n_features = 10
 	print "The " + str(n_features) + " Most Important SNPs"
 	feature_to_importance = fi.get_feature_importance_map(n_features)
 	fi.pretty_print_map(n_features)
