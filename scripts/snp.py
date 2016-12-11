@@ -196,6 +196,24 @@ def processMAF(maf_file_list, matrix_filename):
     
     return matrix
 
+def readSNPMatrix(matrix_file, opt_filtered=True):
+    ''' Given the path to the matrix_file, reads it in to return the relevant 
+    paramters'''
+    # Read SNP Matrix
+    snp_matrix = np.genfromtxt(matrix_path, delimiter='\t', dtype=None,names=True)
+    labels = snp_matrix.dtype.names
+    if opt_filtered:
+        filtered = np.array([list(line) for line in snp_matrix if line['Race'] != 'not reported'])
+        snp_matrix = filtered
+    else:
+        snp_matrix = np.array([list(line) for line in snp_matrix])
+
+    return (labels, snp_matrix)
+    
+def getSNPTrainingParams(labels, snp_matrix):
+    snp_data = filtered[:,1:-2]
+    races = filtered[:,-2]  
+    return {'labels':labels,'snp_data':snp_data, 'races': races} 
 
 if __name__ == '__main__':
     # parse command-line arguments
