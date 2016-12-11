@@ -8,12 +8,6 @@ data from TCGA (The Cancer Genome Atlas) on GDC (Genomic Data Commons).
 import numpy as np 
 from randomforest import RandomForest
 from collections import defaultdict
-# import os
-# import subprocess
-# import sys
-# from sklearn.ensemble import RandomForestClassifier
-# import matplotlib.pyplot as plt
-# import pickle
 from feature_importance import FeatureImportances
 
 def iterative_random_forest(data, class_labels, n_iterations, leave_out_proportion):
@@ -26,8 +20,8 @@ def iterative_random_forest(data, class_labels, n_iterations, leave_out_proporti
 
 	# 0 means the values are valid
 	label_mask = np.array([0]*data.shape[1])
-	data_mask = np.array([[0]*data.shape[1]]*snp_data.shape[0])
-	masked_data = np.ma.masked_array(snp_data, data_mask)
+	data_mask = np.array([[0]*data.shape[1]]*data.shape[0])
+	masked_data = np.ma.masked_array(data, data_mask)
 
 	# Initial fit
 	init_fit = rf.fit(data, class_labels)
@@ -44,7 +38,7 @@ def iterative_random_forest(data, class_labels, n_iterations, leave_out_proporti
 
 		for index in least_important:
 			label_mask[index] = 1
-			data_mask[:,index] = np.ones((1,snp_data.shape[0]))
+			data_mask[:,index] = np.ones((1,data.shape[0]))
 
 		masked_data = np.ma.masked_array(data, data_mask)
 		newest_fit = rf.fit(masked_data, class_labels)
