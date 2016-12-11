@@ -21,8 +21,7 @@ class RandomForest:
 		self.tree_depths = None
 
 	def fit(self, data, classes):
-		if not self.classifier:
-			self.classifier = RandomForestClassifier(n_estimators=1000, oob_score=True, n_jobs=-1, verbose=1)
+		self.classifier = RandomForestClassifier(n_estimators=1000, oob_score=True, n_jobs=-1, verbose=1)
 		self.classifier = self.classifier.fit(data, classes)
 		self.tree_depths = self.get_tree_depths()
 		return self.classifier
