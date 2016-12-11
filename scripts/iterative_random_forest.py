@@ -31,14 +31,15 @@ def iterative_random_forest(data, class_labels, n_iterations, leave_out_proporti
 	oob_scores =[init_fit.oob_score_]
 	for i in xrange(n_iterations):
 		# Remove the from the data 20% least important features 
-		n_features = np.sum(label_mask)
-		n_leave_out = round(n_features*leave_out_proportion)
+		n_features = len(label_mask) - np.sum(label_mask)
+		n_leave_out = int(n_features*leave_out_proportion)
 		
 		least_important = fi.get_least_important_features_indices(n_leave_out)
 
 		for index in least_important:
 			label_mask[index] = 1
-			data_mask[:,index] = np.ones((1,data.shape[0]))
+			for sample in xrange(data.shape[0]):
+				sample = data_mask[sample][index] = 1
 
 		masked_data = np.ma.masked_array(data, data_mask)
 		newest_fit = rf.fit(masked_data, class_labels)
@@ -62,5 +63,5 @@ if __name__ == '__main__':
 	feature_labels = np.load('LGG_snp_matrix.tsv_snps.npy')
 	n_iterations = 4
 	leave_out_proportion = .20
-	optimal_random_forest = iterative_random_forest(data, class_labels, n_iterations, leave_out_proportion)
+	optimal_random_forest = iterative_random_forest(snp_data, class_labels, n_iterations, leave_out_proportion)
 
