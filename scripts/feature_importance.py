@@ -23,7 +23,7 @@ class FeatureImportances:
 		self.numpy_array = importances
 		self.numpy_file = None
 	
-	def set_feature_labels(self, labels)
+	def set_feature_labels(self, labels):
 		self.feature_labels = labels
 	
 	def save_npy(self, feature_importances_file, opt_feature_labels_file=None):
@@ -49,9 +49,9 @@ class FeatureImportances:
 	def get_stats(self):
 		stats_dict = defaultdict(float)
 		stats_dict['Standard Deviation'] = self.get_stdev()
-		stats_dict['Max'] = max(self.np_array)
-		stats_dict['Min'] = min(self.np_array)
-		stats_dict['Median'] = np.median(self.np_array)
+		stats_dict['Max'] = max(self.numpy_array)
+		stats_dict['Min'] = min(self.numpy_array)
+		stats_dict['Median'] = np.median(self.numpy_array)
 		stats_dict['Mean'] = self.get_mean()
 		return stats_dict
 	
@@ -71,13 +71,13 @@ class FeatureImportances:
 		return indices
 			
 	def pretty_print_map(self, n_features):
-		sorted_important_indices = get_most_important_features_indices(n_features)
+		sorted_important_indices = self.get_most_important_features_indices(n_features)
 		for index in sorted_important_indices:
-			print ('%f %s') %(self.numpy_array[index], self.labels[index])
+			print ('%f %s') %(self.numpy_array[index], self.feature_labels[index])
 
 	def get_feature_importance_map(self, n_features):
 		feature_importance_map = dict()
-		indices = get_most_important_features_indices(n_features)
+		indices = self.get_most_important_features_indices(n_features)
 		for index in indices:
 			feature = self.feature_labels[index]
 			importance = self.numpy_array[index]
@@ -99,20 +99,24 @@ if __name__ == '__main__':
 	# parse command-line arguments
 	if len(sys.argv) < 1:
 		print "you must call program as:  "
-		print "   python feature_importance.py <classifier_file>"
+		print "   python feature_importance.py <classifier_file> <labels npy file>"
 		sys.exit(1)
 	classifier_file = sys.argv[1]	
+	labels_file = sys.arv[2]
 
 	#Load classifier and labels
+	classifier = pickle.load(open(classifer_file, "rb" ))
+	labels = np.load(labels_file)	
+	
 	fi = FeatureImportances()
 	fi.set_importances(classifier.feature_importances_)
-	fi.set_labels(labels)
+	fi.set__feature_labels(labels)
 	fi_stats = fi.get_stats()
 
 	# Print out analysis of tree depths
 	print'Feature Importances'
-		for stat in fi_stats:
-			print "%s: %f" %(stat, stats[stat])
+	for stat in fi_stats:
+		print "%s: %f" %(stat, stats[stat])
 	
 	# Analyze feature importance to get the best
 	print "The " + n_features + "Most Important SNPs"

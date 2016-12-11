@@ -24,21 +24,20 @@ class RandomForest:
 		if not self.classifier:
 			self.classifier = RandomForestClassifier(n_estimators=1000, oob_score=True, n_jobs=-1, verbose=1)
 		self.classifier = self.classifier.fit(data, classes)
-		self.get_tree_depths = self.get_tree_depths()
+		self.tree_depths = self.get_tree_depths()
 		return self.classifier
 
-	def save(self, file)
+	def save(self, file):
 		if self.classifier:
 			p_file = open('/'.join(matrix_path.split('/')[:-1]) +'classifier.RF.p','w')
-			p = pickle.dumps(self.classifier, p_file)
+			p = pickle.dump(self.classifier, p_file, protocol=2)
 		else:
 			print 'Could not save classifier. Empty file.'
 
 	def load(self, pickle_file):
 		try:
-			p = pickle.dumps(fitted, p_file)
-			self.classifier = pickle.loads(open(pickle_file, 'r'))
-			self.get_tree_depths = self.get_tree_depths()
+			self.classifier = pickle.load(open(pickle_file, 'r'))
+			self.tree_depths = self.get_tree_depths()
 		except:
 			print 'Could not load classifier'
 
@@ -65,8 +64,6 @@ class RandomForest:
 		
 if __name__ == '__main__':
 	# parse command-line arguments
-	def display_help_message():
-
 	if len(sys.argv) < 1:
 		print "you must call program as:  "
 		print "   python randomforest.py <matrix_dir>  <matrix_type>"
@@ -109,10 +106,13 @@ if __name__ == '__main__':
 
 		print "Number of SNPs considered: %d" %(data.shape[1])
 		races = filtered[:,-2]
-		classes = races	
+		classes = races
+		
+		matrix = snp_matrix	
 
 	print 'Training RandomForestClassifier on given data...'
-	rf = RandomForest(data, classes)
+	rf = RandomForest()
+	rf.fit(data, classes)
 
 	print 'Saving the classifier...'
 	p_file = open('/'.join(matrix_path.split('/')[:-1]) +'classifier.RF.p','w')
@@ -120,27 +120,28 @@ if __name__ == '__main__':
 
 	# Analyze Classifier
 	rf.quick_stats()
-	tree_depth_stats = rf.analyze_tree_depth()
+	tree_depth_stats = rf.analyze_tree_depths()
 	
-	# Write all feature importances and SNPs to a file
-	np.save(matrix_path + '_RF_feature_importance', fitted.feature_importances_)
+	# Write all feature importances and original data matrix to a file
+	np.save(matrix_path + '_RF_feature_importance', rf.classifier.feature_importances_)
 	np.save(matrix_path + '_snps', labels)
-	np.save(matrix_path, snp_matrix)
+	np.save(matrix_path, matrix)
 
 	fi = FeatureImportances()
 	fi.set_importances(rf.classifier.feature_importances_)
-	fi.set_labels(labels)
+	fi.set_feature_labels(labels)
 	fi_stats = fi.get_stats()
 
 	# Print out analysis of tree depths
-	for stat_dict in {'Tree_Depth': tree_depth_stats, 'Feature Importances': fi_stats}:
+	infoDict = {'Tree_Depth': tree_depth_stats, 'Feature Importances': fi_stats}
+	for attribute in infoDict:
 		print attribute
-		stats = fittedInfoDict[attribute]
+		stats = infoDict[attribute]
 		for stat in stats:
 			print "%s: %f" %(stat, stats[stat])
 	
 	# Analyze feature importance to get the best
-	print "The " + n_features + "Most Important SNPs"
 	n_features = 10
-	feature_to_importance = fi.get_feature_importance_map(10)
-	fi.pretty_print_map(10)
+	print "The " + str(n_features) + " Most Important SNPs"
+	feature_to_importance = fi.get_feature_importance_map(n_features)
+	fi.pretty_print_map(n_features)
