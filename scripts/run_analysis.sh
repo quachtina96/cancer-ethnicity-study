@@ -11,9 +11,9 @@
 # python randomforest.py ../data/gdc_data/BRAIN/LGG snp 10 > ../results/randomforest/TCGA.LGG.RandomForest_2.txt
 
 # RNA DATA ANALYSIS
-python randomforest.py /home/cancer-ethnicity-study/data/rna_data/BRCA rna 15 > /home/cancer-ethnicity-study/results/randomforest/rna/BRCA.rf.results.txt
-python randomforest.py /home/cancer-ethnicity-study/data/rna_data/LUAD rna 15 > /home/cancer-ethnicity-study/results/randomforest/rna/LUAD.rf.results.txt
-python randomforest.py /home/cancer-ethnicity-study/data/rna_data/LGG rna 15 > /home/cancer-ethnicity-study/results/randomforest/rna/LGG.rf.results.txt
+python randomforest.py /home/cancer-ethnicity-study/data/rna_data/BRCA rna 15 1 > /home/cancer-ethnicity-study/results/randomforest/rna/BRCA.rf.results.txt
+python randomforest.py /home/cancer-ethnicity-study/data/rna_data/LUAD rna 15 1 > /home/cancer-ethnicity-study/results/randomforest/rna/LUAD.rf.results.txt
+python randomforest.py /home/cancer-ethnicity-study/data/rna_data/LGG rna 15 1 > /home/cancer-ethnicity-study/results/randomforest/rna/LGG.rf.results.txt
 
 # Analyze Feature Importances
 

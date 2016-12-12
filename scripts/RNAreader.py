@@ -89,5 +89,5 @@ def read_rna(directory):
 	# After transpose, num columns should match num genes and num rows shuld match number of patients.
 	assert(matrix.shape[1] == len(genes))
 	# Get the names of the genes (feature labels)
-	labels = genes
+	labels = genes	
 	return matrix, classes, labels

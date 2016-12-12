@@ -21,7 +21,7 @@ class RandomForest:
 		self.n_estimators = n_estimators
 
 	def fit(self, data, classes):
-		self.classifier = RandomForestClassifier(n_estimators=self.n_estimators, oob_score=True, n_jobs=-1, verbose=1, class_weight="balanced")
+		self.classifier = RandomForestClassifier(n_estimators=self.n_estimators, oob_score=True, verbose=1, class_weight="balanced")
 		self.classifier = self.classifier.fit(data, classes)
 		self.tree_depths = self.get_tree_depths()
 		return self.classifier
@@ -106,7 +106,7 @@ if __name__ == '__main__':
 	matrix_type = sys.argv[2]
 	n_features = int(sys.argv[3])
 	n_iter = 1
-	if len(sys.argv == 4):
+	if len(sys.argv) == 4:
 		n_iter = int(sys.argv[4])
 	
 	if matrix_type == 'snp':
@@ -139,8 +139,10 @@ if __name__ == '__main__':
 		classes = races
 		
 		matrix = snp_matrix
+		np.save(matrix_path, matrix)
 	elif matrix_type == 'rna':
-		matrix, classes, labels = RNAreader.read_rna(directory)
+		data, classes, labels = RNAreader.read_rna(directory) 
+		print data.shape
 	else:
 		print "Invalid matrix type. Must be 'snp' or 'rna'"
 		sys.exit(1)
@@ -149,8 +151,8 @@ if __name__ == '__main__':
 	print 'Training RandomForestClassifier on data...'
 	rf = RandomForest(1000)
 	
-	for i in xrange(n_iter-1):
-		rf.fit(data, classes)
+	for i in xrange(n_iter):
+		rf.fit(data, np.array(classes))
 
 		print 'Saving the classifier...'
 		p_file ='/'.join(matrix_path.split('/')[:-1]) +'classifier.RF.p'
@@ -163,8 +165,8 @@ if __name__ == '__main__':
 		# Write all feature importances and original data matrix to a file
 		np.save(matrix_path + '_RF_feature_importance_'+i, rf.classifier.feature_importances_)
 
-	np.save(matrix_path + '_snps', labels)
-	np.save(matrix_path, matrix)
+	#np.save(os.path.join(directory,'feature_labels'), labels)
+	#np.save(matrix_path, matrix)
 
 	fi = FeatureImportances()
 	fi.set_importances(rf.classifier.feature_importances_)

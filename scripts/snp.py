@@ -55,7 +55,8 @@ def mapBarcodeToSnp(dictionary, snp_data, snp_to_class_map, opt_snpSet=None):
     for snp in snp_data:
          # (Hugo_Symbol, Chromosome, Start_Position)
         snp_loc = (snp[0], snp[1], snp[2])
-        if snp_to_class_map[list(snp_loc).join('_')] != 'Silent':
+	snp_string = '_'.join([str(el) for el in snp_loc])
+        if snp_to_class_map[snp_string] != 'Silent':
             tumor_sample_barcode = snp[4]
             patient_barcode = '-'.join(tumor_sample_barcode.split('-')[:3])
             dictionary[patient_barcode][snp_loc] += 1
@@ -65,11 +66,11 @@ def mapBarcodeToSnp(dictionary, snp_data, snp_to_class_map, opt_snpSet=None):
 def mapSnpToVariantClassification(snp_to_class_map, snp_data):
     hugo = snp_data['Hugo_Symbol']
     chrom = snp_data['Chromosome']
-    start = snp_data['Start_Positions']
+    start = snp_data['Start_Position']
     variant_class = snp_data['Variant_Classification']
     for i in xrange(len(hugo)):
-        snp = '_'.join([hugo,chrom,start])
-        snp_to_class_map[snp] = variant_class
+        snp = '_'.join([hugo[i],chrom[i],str(start[i])])
+        snp_to_class_map[snp] = variant_class[i]
 
 def mapPatientBarcodeToUUID(barcode_to_uuid_map, snp_data):
     """Maps the Tumor_Sample_UUID to the first four terms of the corresponding
