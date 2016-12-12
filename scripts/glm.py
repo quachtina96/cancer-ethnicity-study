@@ -4,7 +4,7 @@ import numpy as np
 import pickle
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
-
+import sys
 
 def run_all(filename, cancer):
 	data = np.load(open(filename +'.txt.matrix.npy'))
