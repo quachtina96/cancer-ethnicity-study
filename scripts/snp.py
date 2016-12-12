@@ -11,6 +11,7 @@ import demographic
 import os
 import subprocess
 import sys
+import pickle
 
 def readMaf(filename):
     """Read desired field from the Single Nucleotide Variation MAF file 
@@ -28,13 +29,15 @@ def readMaf(filename):
             Hugo_Symbol
             Chromosome
             Start_Position
+            Variant Classification
             Tumor_Sample_Barcode
             Tumor_Sample_UUID"""
-    column_indices = [0,4,5,15,32]
+    column_indices = [0,4,5,8,15,32]
     snp_data = np.genfromtxt(filename, delimiter='\t', dtype=None, skip_header=1, names=True, usecols=column_indices)
+    
     return snp_data
 
-def mapBarcodeToSnp(dictionary, snp_data, opt_snpSet):
+def mapBarcodeToSnp(dictionary, snp_data, snp_to_class_map, opt_snpSet=None):
     """Updates the given dictionary by mapping tumor sample UUID to the SNPs
     that were found  in the tumor encoded by the barcode.
 
@@ -46,15 +49,27 @@ def mapBarcodeToSnp(dictionary, snp_data, opt_snpSet):
                 Hugo_Symbol
                 Chromosome
                 Start_Position
+                Variant_Classification
                 Tumor_Sample_Barcode
                 Tumor_Sample_UUID"""
     for snp in snp_data:
-        snp_loc = (snp[0], snp[1], snp[2]) # (Chromosome, Start_Position)
-        tumor_sample_barcode = snp[3]
-        patient_barcode = '-'.join(tumor_sample_barcode.split('-')[:4])
-        dictionary[patient_barcode][snp_loc] += 1
-        if type(opt_snpSet) == set:
-            opt_snpSet.add(snp_loc)
+         # (Hugo_Symbol, Chromosome, Start_Position)
+        snp_loc = (snp[0], snp[1], snp[2])
+        if snp_to_class_map[list(snp_loc).join('_')] != 'Silent':
+            tumor_sample_barcode = snp[4]
+            patient_barcode = '-'.join(tumor_sample_barcode.split('-')[:3])
+            dictionary[patient_barcode][snp_loc] += 1
+            if type(opt_snpSet) == set:
+                opt_snpSet.add(snp_loc)
+
+def mapSnpToVariantClassification(snp_to_class_map, snp_data):
+    hugo = snp_data['Hugo_Symbol']
+    chrom = snp_data['Chromosome']
+    start = snp_data['Start_Positions']
+    variant_class = snp_data['Variant_Classification']
+    for i in xrange(len(hugo)):
+        snp = '_'.join([hugo,chrom,start])
+        snp_to_class_map[snp] = variant_class
 
 def mapPatientBarcodeToUUID(barcode_to_uuid_map, snp_data):
     """Maps the Tumor_Sample_UUID to the first four terms of the corresponding
@@ -164,20 +179,19 @@ def processMAF(maf_file_list, matrix_filename):
     int_default_dict = lambda: defaultdict(int)
     sample_to_snps = defaultdict(int_default_dict)
     barcode_to_uuid_map = defaultdict(str)
+    snp_to_class_map = defaultdict(str)
 
     snpSet = set()
     print "Reading in SNP MAF files..."
 
-    # barcode_hugo_files = []
     for maf in maf_file_list:
         snp_data = readMaf(maf)
         mapPatientBarcodeToUUID(barcode_to_uuid_map, snp_data)
-        mapBarcodeToSnp(sample_to_snps, snp_data, snpSet)
+        mapSnpToVariantClassification(snp_to_class_map, snp_data)
+        mapBarcodeToSnp(sample_to_snps, snp_data, snp_to_class_map, snpSet)
 
-        #maf_id = maf.split('.')[:4]
-        #filename = 'barcode_hugo_'+ '.'.join(maf_id) + '.txt'
-        #getPatientBarcodeHugoSymbolPairs(snp_data, filename)
-        #barcode_hugo_files.append(filename)
+    print "Saving SNP Variant Classification information..."
+    pickle.dump(snp_to_class_map, open(matrix_filename + '.variant_classifcation.p','wb')) 
 
     # Filter SNPs and return a dictionary mapping samples to SNPs that meet the 
     # threshold.
@@ -192,7 +206,7 @@ def processMAF(maf_file_list, matrix_filename):
     print "Filtered SNP Count %d" %(len(filteredSnpSet))
 
     print "Forming Matrix..."
-    matrix = formMatrix(filteredSnpSet, filteredSampleMap,barcode_to_uuid_map, matrix_filename)
+    matrix = formMatrix(filteredSnpSet, filteredSampleMap, barcode_to_uuid_map, matrix_filename)
     
     return matrix
 
@@ -209,11 +223,6 @@ def readSNPMatrix(matrix_file, opt_filtered=True):
         snp_matrix = np.array([list(line) for line in snp_matrix])
 
     return (labels, snp_matrix)
-    
-def getSNPTrainingParams(labels, snp_matrix):
-    snp_data = filtered[:,1:-2]
-    races = filtered[:,-2]  
-    return {'labels':labels,'snp_data':snp_data, 'races': races} 
 
 if __name__ == '__main__':
     # parse command-line arguments
@@ -239,6 +248,7 @@ if __name__ == '__main__':
     os.system('mv ' + matrix_filename + ' ' + matrix_filepath)
     
     print "Matrix can be found at %s" %(matrix_filepath)
+    print "SNP to Variant Classification can be found at %s" %(matrix_filepath + '.variant_classifcation.p')
 
 
 
