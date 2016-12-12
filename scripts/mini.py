@@ -82,9 +82,9 @@ lusc = '''0.003395 FLNB_chr3_58109308
 mini_list = [brca, gbm, kich, kirp, lgg, luad, lusc]
 
 class SNP:
-	__init__(self, label):
+	def __init__(self, label):
 		self.label = label 
-		temp = label.split['_']
+		temp = label.split('_')
 		self.gene = label[0]
 		self.chr = label[1]
 		self.start_pos = label[2]
@@ -94,7 +94,7 @@ def read_mini(mini):
 	features = []
 	features = mini.split('\n')
 	for feature in features:
-		splitted = features.split(' ')
+		splitted = feature.split(' ')
 		score = splitted[0]
 		name = splitted[1]
 		scores.append(score)
@@ -102,7 +102,7 @@ def read_mini(mini):
 	return {'scores': scores, 'features' : features}
 
 mini_labels = ['brca', 'gbm', 'kich', 'kirp', 'lgg', 'luad', 'lusc']
-mini_dict_list = [read_mini(mini) for mini in mini_list]
+mini_dict_list = [read_mini(text) for text in mini_list]
 
 
 

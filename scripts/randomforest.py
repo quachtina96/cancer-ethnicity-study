@@ -67,17 +67,17 @@ def renormalize(distr):
     normalization_constant = sum(distr.values())
     for key in distr.keys():
         distr[key] = float(distr[key])/normalization_constant
-
+	
 # Functions for comparing within a specific caner type.
 def getClassProportions(data, classes_labels, index):
 	'''What proportion of each race or ethnicity has the specific trait?'''
 
 	# Get the distribution of a certain SNP's occurrence over the observed classes
-	distribution = getDistributionOverClasses(data, classes_labels, index)
+	counts = getCountsOverClasses(data, classes_labels, index, False)
 	proportions = defaultdict(float)
-	for candidate_class in distribution:
-		class_member_count = classes.count(candidate_class)
-		proportions[candidate_class] = float(distribution[candidate_class])/class_member_count
+	for candidate_class in counts:
+		class_member_count = list(classes_labels).count(candidate_class)
+		proportions[candidate_class] = float(counts[candidate_class])/class_member_count
 	return proportions
 
 def getCountsOverClasses(data, class_labels, index, opt_normalized):
@@ -85,11 +85,13 @@ def getCountsOverClasses(data, class_labels, index, opt_normalized):
 	races? This function gets the counts that you can normalize to get a 
 	distribution'''
 	feature_occurences = data[:, index]
-	counts = defaultdict(float)
-	for i in xrange(data.shape[1]):
-		if snp_occurences[i]:
+	print feature_occurences.shape
+	counts = defaultdict(float)	
+	
+	for i in xrange(data.shape[0]):
+		if feature_occurences[i]:
 			counts[class_labels[i]] += 1
-	if normalized:
+	if opt_normalized:
 		renormalize(counts)
 	return counts
 
@@ -182,20 +184,17 @@ if __name__ == '__main__':
 	feature_to_importance = fi.get_feature_importance_map(n_features)
 	fi.pretty_print_map(n_features)
 
-	try:
-		for index in fi.get_most_important_features_indices(n_features):
-			snp_id = labels[index] 
-			print snp_id
-			print 'What proportion of each race or ethnicity has the specific trait?'
-			proportions = getClassProportions(data, classes_labels, index)
-			pprint.(proportions)
-			print "What is the distribution of a certain SNP's occurrence over the observed races?"
-			print "First, counts:"
-			counts = getCountsOverClasses(data, classes_labels, index)
-			pprint.(counts)
-			print "Second, normalized distribution"
-			distribution = renormalize(counts)
-			ppprint.(distribution)
-	except:
-		print "Did not successfully do meta analysis on the feature importances"
-
+	for index in fi.get_most_important_features_indices(n_features):
+		snp_id = labels[index] 
+		print snp_id
+		print 'What proportion of each race or ethnicity has the specific trait?'
+		proportions = getClassProportions(data, classes, index)
+		pprint(dict(proportions))
+		print "What is the distribution of a certain SNP's occurrence over the observed races?"
+		print "First, counts:"
+		counts = getCountsOverClasses(data, classes, index, False)
+		pprint(dict(counts))
+		print "Second, normalized distribution"
+		renormalize(counts)
+		pprint(dict(counts))
+	#print "Did not successfully do meta analysis on the feature importances"
