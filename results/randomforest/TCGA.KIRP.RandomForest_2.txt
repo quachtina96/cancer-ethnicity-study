@@ -1,0 +1,36 @@
+Conducting Random Forest analysis...
+KIRP_snp_matrix.tsv
+Number of patients before filtering those without reported races: 289
+Number of patients after filtering: 274
+Number of SNPs considered: 29756
+Training RandomForestClassifier on given data...
+Saving the classifier...
+Classes: ['american indian or alaska native' 'asian' 'black or african american'
+ 'white']
+OOB Score: 0.744526
+Number of Outputs: 1
+Feature Importances
+Standard Deviation: 0.000243
+Max: 0.007411
+Mean: 0.000034
+Median: 0.000000
+Min: 0.000000
+Tree_Depth
+Max: 176.000000
+Mean: 38.000000
+Median: 38.000000
+Min: 38.000000
+The 10 Most Important SNPs
+0.007411 KIF4B_chr5_155016047
+0.006819 OR11H2_chr14_19713355
+0.006750 RUVBL2_chr19_49014564
+0.006603 MTND3_chrM_10197
+0.006127 ZNF19_chr16_71475874
+0.006014 RFFL_chr17_35021779
+0.005913 BPIFB2_chr20_33020377
+0.005728 SAV1_chr14_50635273
+0.005670 ATG4AP1_chrX_82999122
+0.005440 LDHBP2_chrX_76335028
+KIF4B_chr5_155016047
+What proportion of each race or ethnicity has the specific trait?
+Did not successfully do meta analysis on the feature importances
