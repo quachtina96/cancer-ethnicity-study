@@ -7,11 +7,11 @@ from statsmodels.formula.api import ols
 import sys
 
 def run_all(filename, cancer):
-	data = np.load(open(filename +'.txt.matrix.npy'))
+	data = np.load(open(filename +'.data.txt.matrix.npy'))
 	patients = []
 	genes = []
 
-	with open(filename +'.txt.genes.csv', 'rb') as csvfile:
+	with open(filename +'.data.txt.genes.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile)
 		count = 0
 		for row in reader:
@@ -19,7 +19,7 @@ def run_all(filename, cancer):
 				genes.append(item)
 				count += 1
 
-	with open(filename + '.txt.patients.csv', 'rb') as f:
+	with open(filename + '.data.txt.patients.csv', 'rb') as f:
 		reader = csv.reader(f)
 		patient_count = 0
 		for row in reader:
