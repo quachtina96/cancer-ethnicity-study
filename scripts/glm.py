@@ -97,4 +97,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-run_all('../data/BRCA/BRCA', 'BRCA')
+#run_all('../data/BRCA/BRCA', 'BRCA')
