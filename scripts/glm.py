@@ -4,14 +4,15 @@ import numpy as np
 import pickle
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
-
+import sys
+from statsmodels.sandbox.stats.multicomp import fdrcorrection0, multipletests
 
 def run_all(filename, cancer):
-	data = np.load(open(filename +'.txt.matrix.npy'))
+	data = np.load(open(filename +'.data.txt.matrix.npy'))
 	patients = []
 	genes = []
 
-	with open(filename +'.txt.genes.csv', 'rb') as csvfile:
+	with open(filename +'.data.txt.genes.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile)
 		count = 0
 		for row in reader:
@@ -19,7 +20,7 @@ def run_all(filename, cancer):
 				genes.append(item)
 				count += 1
 
-	with open(filename + '.txt.patients.csv', 'rb') as f:
+	with open(filename + '.data.txt.patients.csv', 'rb') as f:
 		reader = csv.reader(f)
 		patient_count = 0
 		for row in reader:
@@ -39,7 +40,6 @@ def run_all(filename, cancer):
 			'age': [],
 			'gender': [],
 			'race': [],
-			#'ethnicity': [],
 			'stage': []
 	}
 
@@ -53,13 +53,14 @@ def run_all(filename, cancer):
 				patient_data['age'].append(int(info['years_to_birth']))
 				patient_data['gender'].append(info['gender'])
 				patient_data['race'].append(info['race'])
-				#patient_data['ethnicity'].append(info['ethnicity'])
 				patient_data['stage'].append(info['pathologic_stage'])
 		else:
 			indices_to_delete.add(j)
 
 	index = [item for a, item in enumerate(index) if a not in indices_to_delete]
 	print len(index)
+	print len(patient_data['gender'])
+
 	assert len(index) == len(patient_data['gender'])
 	master_df = pd.DataFrame(patient_data, index=index)
 	print 'Master dataframe created'
@@ -67,12 +68,14 @@ def run_all(filename, cancer):
 	outfile = open(filename + '_pvals.tsv', 'w')
 	for i, gene in enumerate(genes):
 		expression_data = [item for a, item in enumerate(list(data[i])) if a not in indices_to_delete]
+
 		df = master_df.copy()
 		df['expression'] = pd.Series(expression_data, index=master_df.index)
-
+		assert len(df['expression']) == len(df['gender']) == len(df['stage']) == len(df['race']) == len(df['age'])
 		# Run anova
 		pval = anova(df)
 		outfile.write(str(gene) + "\t" + str(pval) + "\n")
+	print 'Completed ANOVA on all genes'
 	print 'Output available at ' + filename + '_pvals.tsv'
 
 def anova(data):
