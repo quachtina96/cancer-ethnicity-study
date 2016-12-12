@@ -13,6 +13,7 @@ import sys
 from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
 import pickle
+from pprint import pprint
 from feature_importance import FeatureImportances
 
 class RandomForest:
@@ -61,6 +62,38 @@ class RandomForest:
 		tree_depth_stats['Mean'] = min(tree_depths)
 		return tree_depth_stats
 
+# Util functions
+def renormalize(distr):
+    normalization_constant = sum(distr.values())
+    for key in distr.keys():
+        distr[key] = float(distr[key])/normalization_constant
+
+# Functions for comparing within a specific caner type.
+def getClassProportions(data, classes_labels, index):
+	'''What proportion of each race or ethnicity has the specific trait?'''
+
+	# Get the distribution of a certain SNP's occurrence over the observed classes
+	distribution = getDistributionOverClasses(data, classes_labels, index)
+	proportions = defaultdict(float)
+	for candidate_class in distribution:
+		class_member_count = classes.count(candidate_class)
+		proportions[candidate_class] = float(distribution[candidate_class])/class_member_count
+	return proportions
+
+def getCountsOverClasses(data, class_labels, index, opt_normalized):
+	'''What is the distribution of a certain SNP's occurrence over the observed
+	races? This function gets the counts that you can normalize to get a 
+	distribution'''
+	feature_occurences = data[:, index]
+	counts = defaultdict(float)
+	for i in xrange(data.shape[1]):
+		if snp_occurences[i]:
+			counts[class_labels[i]] += 1
+	if normalized:
+		renormalize(counts)
+	return counts
+
+
 		
 if __name__ == '__main__':
 	# parse command-line arguments
@@ -73,17 +106,17 @@ if __name__ == '__main__':
 	directory = sys.argv[1]
 	matrix_type = sys.argv[2]
 	n_features = int(sys.argv[3])
-
-	print "Conducting Random Forest analysis..."
-	for root, dirs, files in os.walk(directory):
-		for file in files:
-			if file.endswith("matrix.tsv"):
-				print file
-				matrix_path = os.path.join(root, file)
-	
-	matrix_filename = matrix_path.split('/')[-1]
 	
 	if matrix_type == 'snp':
+		print "Conducting Random Forest analysis..."
+		for root, dirs, files in os.walk(directory):
+			for file in files:
+				if file.endswith("matrix.tsv"):
+					print file
+					matrix_path = os.path.join(root, file)
+		
+		matrix_filename = matrix_path.split('/')[-1]
+
 		# Read SNP Matrix
 		snp_matrix = np.genfromtxt(matrix_path, delimiter='\t', dtype=None,names=True)
 		labels = snp_matrix.dtype.names[1:-2]
@@ -103,7 +136,16 @@ if __name__ == '__main__':
 		races = filtered[:,-2]
 		classes = races
 		
-		matrix = snp_matrix	
+		matrix = snp_matrix
+	# elif matrix_type == 'rna':
+	# 	print "Conducting Random Forest analysis..."
+	# 	for root, dirs, files in os.walk(directory):
+	# 		for file in files:
+	# 			if file.endswith("matrix.tsv"):
+	# 				print file
+	# 				matrix_path = os.path.join(root, file)
+		
+	# 	matrix_filename = matrix_path.split('/')[-1]
 
 	print 'Training RandomForestClassifier on given data...'
 	rf = RandomForest(1000)
@@ -139,3 +181,21 @@ if __name__ == '__main__':
 	print "The %d Most Important SNPs" %(n_features)
 	feature_to_importance = fi.get_feature_importance_map(n_features)
 	fi.pretty_print_map(n_features)
+
+	try:
+		for index in fi.get_most_important_features_indices(n_features):
+			snp_id = labels[index] 
+			print snp_id
+			print 'What proportion of each race or ethnicity has the specific trait?'
+			proportions = getClassProportions(data, classes_labels, index)
+			pprint.(proportions)
+			print "What is the distribution of a certain SNP's occurrence over the observed races?"
+			print "First, counts:"
+			counts = getCountsOverClasses(data, classes_labels, index)
+			pprint.(counts)
+			print "Second, normalized distribution"
+			distribution = renormalize(counts)
+			ppprint.(distribution)
+	except:
+		print "Did not successfully do meta analysis on the feature importances"
+
