@@ -69,10 +69,10 @@ def run_all(filename, cancer):
 	outfile = open(filename + '_pvals.tsv', 'w')
 	for i, gene in enumerate(genes):
 		expression_data = [item for a, item in enumerate(list(data[i])) if a not in indices_to_delete]
-		print len(expression_data)
+
 		df = master_df.copy()
 		df['expression'] = pd.Series(expression_data, index=master_df.index)
-
+		assert len(df['expression']) == len(df['gender']) == len(df['stage']) == len(df['race']) == len(df['age'])
 		# Run anova
 		pval = anova(df)
 		outfile.write(str(gene) + "\t" + str(pval) + "\n")
