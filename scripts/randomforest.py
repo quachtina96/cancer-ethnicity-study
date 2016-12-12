@@ -4,17 +4,15 @@ data from TCGA (The Cancer Genome Atlas) on GDC (Genomic Data Commons).
 
 @author Tina Quach (quacht@mit.edu)
 '''
-
-import numpy as np 
-from collections import defaultdict
 import os
 import subprocess
 import sys
-from sklearn.ensemble import RandomForestClassifier
-import matplotlib.pyplot as plt
+import numpy as np 
+from collections import defaultdict
 import pickle
-from pprint import pprint
+from sklearn.ensemble import RandomForestClassifier
 from feature_importance import FeatureImportances
+import RNAreader
 
 class RandomForest:
 	def __init__(self, n_estimators):
@@ -94,8 +92,6 @@ def getCountsOverClasses(data, class_labels, index, opt_normalized):
 	if opt_normalized:
 		renormalize(counts)
 	return counts
-
-
 		
 if __name__ == '__main__':
 	# parse command-line arguments
@@ -110,7 +106,7 @@ if __name__ == '__main__':
 	n_features = int(sys.argv[3])
 	
 	if matrix_type == 'snp':
-		print "Conducting Random Forest analysis..."
+		print "Conducting Random Forest analysis on SNP data..."
 		for root, dirs, files in os.walk(directory):
 			for file in files:
 				if file.endswith("matrix.tsv"):
@@ -139,17 +135,14 @@ if __name__ == '__main__':
 		classes = races
 		
 		matrix = snp_matrix
-	# elif matrix_type == 'rna':
-	# 	print "Conducting Random Forest analysis..."
-	# 	for root, dirs, files in os.walk(directory):
-	# 		for file in files:
-	# 			if file.endswith("matrix.tsv"):
-	# 				print file
-	# 				matrix_path = os.path.join(root, file)
-		
-	# 	matrix_filename = matrix_path.split('/')[-1]
+	elif matrix_type == 'rna':
+		matrix, classes, labels = RNAreader.read_rna(directory)
+	else:
+		print "Invalid matrix type. Must be 'snp' or 'rna'"
+		sys.exit(1)
 
-	print 'Training RandomForestClassifier on given data...'
+	print ""
+	print 'Training RandomForestClassifier on data...'
 	rf = RandomForest(1000)
 	rf.fit(data, classes)
 
@@ -178,6 +171,7 @@ if __name__ == '__main__':
 		stats = infoDict[attribute]
 		for stat in stats:
 			print "%s: %f" %(stat, stats[stat])
+		print ""
 	
 	# Analyze feature importance to get the best
 	print "The %d Most Important SNPs" %(n_features)
@@ -189,12 +183,13 @@ if __name__ == '__main__':
 		print snp_id
 		print 'What proportion of each race or ethnicity has the specific trait?'
 		proportions = getClassProportions(data, classes, index)
-		pprint(dict(proportions))
+		print dict(proportions)
+		print ""
 		print "What is the distribution of a certain SNP's occurrence over the observed races?"
 		print "First, counts:"
 		counts = getCountsOverClasses(data, classes, index, False)
-		pprint(dict(counts))
+		print dict(counts)
 		print "Second, normalized distribution"
 		renormalize(counts)
-		pprint(dict(counts))
+		print dict(counts)
 	#print "Did not successfully do meta analysis on the feature importances"
