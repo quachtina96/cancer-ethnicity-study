@@ -26,7 +26,7 @@ def fdr_correct(filename):
 	for i, val in enumerate(new_pvals):
 		if val < 0.05:
 			accepted += 1
-			outfile.write(str(genes[i]) + "\t" + str(val) + "\n")
+			outfile.write(str(i) + '\t' + str(genes[i]) + "\t" + str(val) + "\n")
 
 	print str(accepted) + '/' + str(len(new_pvals)) + ' genes accepted.'
 
