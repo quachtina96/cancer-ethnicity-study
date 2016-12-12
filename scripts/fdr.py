@@ -1,6 +1,6 @@
 from statsmodels.sandbox.stats.multicomp import fdrcorrection0, multipletests
 import sys
-
+import math
 # Input filename of genes + pvalues
 def fdr_correct(filename):
 	genes = []
@@ -8,13 +8,19 @@ def fdr_correct(filename):
 	with open(filename) as f:
 		for line in f:
 			parts = line.strip().split('\t')
-			genes.append(parts[0])
-			pvals.append(float(parts[1]))
+			gene = parts[0]
+			pval = float(parts[1])
+
+			if math.isnan(pval):
+				print gene + ' has a p-value of ' + parts[1]
+			else:
+				genes.append(gene)
+				pvals.append(pval)
 
 	corrected = multipletests(pvals, method='fdr_bh')
 	new_pvals = corrected[1]
 
-	outfile = open(filename + '.corrected.tsv', 'w')
+	outfile = open('.'.join(filename.split('.')[:-1]) + '.corrected.tsv', 'w')
 
 	accepted = 0
 	for i, val in enumerate(new_pvals):
@@ -22,7 +28,7 @@ def fdr_correct(filename):
 			accepted += 1
 			outfile.write(str(genes[i]) + "\t" + str(val) + "\n")
 
-	print str(float(accepted)/float(len(new_pvals))) + ' genes accepted.'
+	print str(accepted) + '/' + str(len(new_pvals)) + ' genes accepted.'
 
 
 def main():
@@ -38,4 +44,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+#fdr_correct('../data/BRCA/BRCA_pvals.tsv')
    
