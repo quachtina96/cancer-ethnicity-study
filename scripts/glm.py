@@ -7,7 +7,7 @@ from statsmodels.formula.api import ols
 import sys
 from statsmodels.sandbox.stats.multicomp import fdrcorrection0, multipletests
 
-def run_all(filename, cancer):
+def load_data(filename, cancer):
 	data = np.load(open(filename +'.data.txt.matrix.npy'))
 	patients = []
 	genes = []
@@ -48,14 +48,14 @@ def run_all(filename, cancer):
 		if patient in clinical:
 			info = clinical[patient]
 			if info['years_to_birth'] == 'NA' or info['gender'] == 'NA' or info['race'] == 'NA' or info['pathologic_stage'] == 'NA':
-				indices_to_delete.add(j)
+				indices_to_delete.add(int(j))
 			else:
 				patient_data['age'].append(int(info['years_to_birth']))
 				patient_data['gender'].append(info['gender'])
 				patient_data['race'].append(info['race'])
 				patient_data['stage'].append(info['pathologic_stage'])
 		else:
-			indices_to_delete.add(j)
+			indices_to_delete.add(int(j))
 
 	index = [item for a, item in enumerate(index) if a not in indices_to_delete]
 	print len(index)
@@ -64,6 +64,11 @@ def run_all(filename, cancer):
 	assert len(index) == len(patient_data['gender'])
 	master_df = pd.DataFrame(patient_data, index=index)
 	print 'Master dataframe created'
+
+	return data, patients, genes, master_df, clinical, indices_to_delete
+
+def run_all(filename, cancer):
+	data, patients, genes, master_df, clinical, indices_to_delete = load_data(filename, cancer)
 
 	outfile = open(filename + '_pvals.tsv', 'w')
 	for i, gene in enumerate(genes):
@@ -75,14 +80,13 @@ def run_all(filename, cancer):
 		# Run anova
 		pval = anova(df)
 		outfile.write(str(gene) + "\t" + str(pval) + "\n")
+
 	print 'Completed ANOVA on all genes'
 	print 'Output available at ' + filename + '_pvals.tsv'
 
 def anova(data):
 	mod = ols('expression ~ age + gender + C(race) + C(stage)', data=data).fit()
 	aov_table = sm.stats.anova_lm(mod)
-	#print mod.summary()
-	#print aov_table
 	return float(aov_table.loc['C(race)']['PR(>F)'])
 
 def main():
