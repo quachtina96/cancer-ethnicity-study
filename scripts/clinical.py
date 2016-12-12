@@ -25,12 +25,13 @@ def get_clinical(filename):
 
 	for i, patient in enumerate(patients):
 		path = None
+
 		if 'pathologic_stage' in info:
 			path = info['pathologic_stage'][i]
 			
 		patient_info[patient] = {
 			'years_to_birth': info['years_to_birth'][i],
-			'pathologic_stage': path,
+			#'pathologic_stage': path,
 			'gender': info['gender'][i],
 			'race': info['race'][i],
 			'ethnicity': info['ethnicity'][i]

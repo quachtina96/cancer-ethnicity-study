@@ -40,27 +40,29 @@ def load_data(filename, cancer):
 			'age': [],
 			'gender': [],
 			'race': [],
-			'stage': []
+			#'stage': []
 	}
 
 	indices_to_delete = set()
 	for j, patient in enumerate(index):
 		if patient in clinical:
 			info = clinical[patient]
-			if info['years_to_birth'] == 'NA' or info['gender'] == 'NA' or info['race'] == 'NA' or info['pathologic_stage'] == 'NA':
+			if 'NA' in info.values():
 				indices_to_delete.add(int(j))
 			else:
 				patient_data['age'].append(int(info['years_to_birth']))
 				patient_data['gender'].append(info['gender'])
 				patient_data['race'].append(info['race'])
-				patient_data['stage'].append(info['pathologic_stage'])
+				#patient_data['stage'].append(info['pathologic_stage'])
 		else:
 			indices_to_delete.add(int(j))
 
 	index = [item for a, item in enumerate(index) if a not in indices_to_delete]
-	print 'Number of cases: ' + str(len(index))
+	print 'NUmber of cases deleted: ' + str(len(indices_to_delete))
+	print 'Number of cases remaining: ' + str(len(index))
 
 	assert len(index) == len(patient_data['gender'])
+
 	master_df = pd.DataFrame(patient_data, index=index)
 	print 'Master dataframe created'
 
@@ -72,10 +74,9 @@ def run_all(filename, cancer):
 	outfile = open(filename + '_pvals.tsv', 'w')
 	for i, gene in enumerate(genes):
 		expression_data = [item for a, item in enumerate(list(data[i])) if a not in indices_to_delete]
-
 		df = master_df.copy()
 		df['expression'] = pd.Series(expression_data, index=master_df.index)
-		assert len(df['expression']) == len(df['gender']) == len(df['stage']) == len(df['race']) == len(df['age'])
+		assert len(df['expression']) == len(df['gender']) == len(df['race']) == len(df['age'])
 		# Run anova
 		pval = anova(df)
 		outfile.write(str(gene) + "\t" + str(pval) + "\n")
@@ -84,7 +85,8 @@ def run_all(filename, cancer):
 	print 'Output available at ' + filename + '_pvals.tsv'
 
 def anova(data):
-	mod = ols('expression ~ age + gender + C(race) + C(stage)', data=data).fit()
+	#mod = ols('expression ~ age + gender + C(race) + C(stage)', data=data).fit()
+	mod = ols('expression ~ age + gender + C(race)', data=data).fit()
 	aov_table = sm.stats.anova_lm(mod)
 	return float(aov_table.loc['C(race)']['PR(>F)'])
 
@@ -104,3 +106,4 @@ if __name__ == "__main__":
     main()
 
 #run_all('../data/BRCA/BRCA', 'BRCA')
+
