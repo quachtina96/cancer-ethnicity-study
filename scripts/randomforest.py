@@ -16,19 +16,20 @@ import pickle
 from feature_importance import FeatureImportances
 
 class RandomForest:
-	def __init__(self):
+	def __init__(self, n_estimators):
 		self.classifier = None
 		self.tree_depths = None
+		self.n_estimators = n_estimators
 
 	def fit(self, data, classes):
-		self.classifier = RandomForestClassifier(n_estimators=1000, oob_score=True, n_jobs=-1, verbose=1)
+		self.classifier = RandomForestClassifier(n_estimators=self.n_estimators, oob_score=True, n_jobs=-1, verbose=1, class_weight="balanced")
 		self.classifier = self.classifier.fit(data, classes)
 		self.tree_depths = self.get_tree_depths()
 		return self.classifier
 
-	def save(self, file):
+	def save(self, classifier_file):
 		if self.classifier:
-			p_file = open('/'.join(matrix_path.split('/')[:-1]) +'classifier.RF.p','w')
+			p_file = open(classifier_file ,'w')
 			p = pickle.dump(self.classifier, p_file, protocol=2)
 		else:
 			print 'Could not save classifier. Empty file.'
@@ -63,21 +64,15 @@ class RandomForest:
 		
 if __name__ == '__main__':
 	# parse command-line arguments
-	if len(sys.argv) < 1:
+	if len(sys.argv) < 2:
 		print "you must call program as:  "
 		print "   python randomforest.py <matrix_dir>  <matrix_type> <n_features>"
-		print "   or "
-		print "   python randomforest.py -h"
+	
 		sys.exit(1)
 
-	if (sys.argv[1] == '-h'):
-		# Display help message
-		print "python randomforest.py <matrix_dir>  <matrix_type> <n_features>"
-		print "   matrix_dir: path to the directory containing the matrix to train on. "
-		print "   matrix_type: type of matrix ('snp')"
 	directory = sys.argv[1]
 	matrix_type = sys.argv[2]
-	n_features = sys.argv[3]
+	n_features = int(sys.argv[3])
 
 	print "Conducting Random Forest analysis..."
 	for root, dirs, files in os.walk(directory):
@@ -111,11 +106,11 @@ if __name__ == '__main__':
 		matrix = snp_matrix	
 
 	print 'Training RandomForestClassifier on given data...'
-	rf = RandomForest()
+	rf = RandomForest(1000)
 	rf.fit(data, classes)
 
 	print 'Saving the classifier...'
-	p_file = open('/'.join(matrix_path.split('/')[:-1]) +'classifier.RF.p','w')
+	p_file ='/'.join(matrix_path.split('/')[:-1]) +'classifier.RF.p'
 	rf.save(p_file)
 
 	# Analyze Classifier
@@ -141,6 +136,6 @@ if __name__ == '__main__':
 			print "%s: %f" %(stat, stats[stat])
 	
 	# Analyze feature importance to get the best
-	print "The " + str(n_features) + " Most Important SNPs"
+	print "The %d Most Important SNPs" %(n_features)
 	feature_to_importance = fi.get_feature_importance_map(n_features)
 	fi.pretty_print_map(n_features)

@@ -64,11 +64,13 @@ class FeatureImportances:
 
 	def get_most_important_features_indices(self, n_features, sorted_greatest_to_least=True):
 		# sorted least_to_greatest
-		indices = self.numpy_array.argsort()[-n_features:]
-		if sorted_greatest_to_least:
+		assert(type(n_features) == int)
+		indices = self.numpy_array.argsort()[::-1]
+		selected = indices[:n_features]
+		if not sorted_greatest_to_least:
 			# reverse the sort
-			indices = indices[::-1]
-		return indices
+			selected = selected[::-1]
+		return selected
 	
 	def get_least_important_features_indices(self, n_features, sorted_greatest_to_least=True):
 		# sorted least_to_greatest
