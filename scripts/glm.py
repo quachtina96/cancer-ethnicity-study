@@ -60,6 +60,8 @@ def run_all(filename, cancer):
 
 	index = [item for a, item in enumerate(index) if a not in indices_to_delete]
 	print len(index)
+	print len(patient_data['gender'])
+
 	assert len(index) == len(patient_data['gender'])
 	master_df = pd.DataFrame(patient_data, index=index)
 	print 'Master dataframe created'
@@ -67,6 +69,7 @@ def run_all(filename, cancer):
 	outfile = open(filename + '_pvals.tsv', 'w')
 	for i, gene in enumerate(genes):
 		expression_data = [item for a, item in enumerate(list(data[i])) if a not in indices_to_delete]
+		print len(expression_data)
 		df = master_df.copy()
 		df['expression'] = pd.Series(expression_data, index=master_df.index)
 
