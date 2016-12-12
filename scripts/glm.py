@@ -5,6 +5,7 @@ import pickle
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
 import sys
+from statsmodels.sandbox.stats.multicomp import fdrcorrection0, multipletests
 
 def run_all(filename, cancer):
 	data = np.load(open(filename +'.data.txt.matrix.npy'))
@@ -39,7 +40,6 @@ def run_all(filename, cancer):
 			'age': [],
 			'gender': [],
 			'race': [],
-			#'ethnicity': [],
 			'stage': []
 	}
 
@@ -53,7 +53,6 @@ def run_all(filename, cancer):
 				patient_data['age'].append(int(info['years_to_birth']))
 				patient_data['gender'].append(info['gender'])
 				patient_data['race'].append(info['race'])
-				#patient_data['ethnicity'].append(info['ethnicity'])
 				patient_data['stage'].append(info['pathologic_stage'])
 		else:
 			indices_to_delete.add(j)
@@ -76,6 +75,7 @@ def run_all(filename, cancer):
 		# Run anova
 		pval = anova(df)
 		outfile.write(str(gene) + "\t" + str(pval) + "\n")
+	print 'Completed ANOVA on all genes'
 	print 'Output available at ' + filename + '_pvals.tsv'
 
 def anova(data):

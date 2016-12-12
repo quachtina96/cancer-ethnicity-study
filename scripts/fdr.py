@@ -1,4 +1,5 @@
-import statsmodels.sandbox.stats.multicomp.fdrcorrection0 as fdrcorrection
+from statsmodels.sandbox.stats.multicomp import fdrcorrection0, multipletests
+import sys
 
 # Input filename of genes + pvalues
 def fdr_correct(filename):
@@ -8,4 +9,33 @@ def fdr_correct(filename):
 		for line in f:
 			parts = line.strip().split('\t')
 			genes.append(parts[0])
-			pvals.append(parts[1])
+			pvals.append(float(parts[1]))
+
+	corrected = multipletests(pvals, method='fdr_bh')
+	new_pvals = corrected[1]
+
+	outfile = open(filename + '.corrected.tsv', 'w')
+
+	accepted = 0
+	for i, val in enumerate(new_pvals):
+		if val < 0.05:
+			accepted += 1
+			outfile.write(str(genes[i]) + "\t" + str(val) + "\n")
+
+	print str(float(accepted)/float(len(new_pvals))) + ' genes accepted.'
+
+
+def main():
+
+    """Checks if we have the right number of command line arguments
+       and reads them in"""
+    if len(sys.argv) < 1:
+        print "you must call program as: python ./fdr.py <pvalue_file>"
+        sys.exit(1)
+
+    filename = sys.argv[1]
+    fdr_correct(filename)
+
+if __name__ == "__main__":
+    main()
+   
