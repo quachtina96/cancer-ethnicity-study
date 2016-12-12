@@ -98,12 +98,16 @@ if __name__ == '__main__':
 	if len(sys.argv) < 2:
 		print "you must call program as:  "
 		print "   python randomforest.py <matrix_dir>  <matrix_type> <n_features>"
+		print "an addition <n_iterations> to run random forest is optional"
 	
 		sys.exit(1)
 
 	directory = sys.argv[1]
 	matrix_type = sys.argv[2]
 	n_features = int(sys.argv[3])
+	n_iter = 1
+	if len(sys.argv == 4):
+		n_iter = int(sys.argv[4])
 	
 	if matrix_type == 'snp':
 		print "Conducting Random Forest analysis on SNP data..."
@@ -144,18 +148,21 @@ if __name__ == '__main__':
 	print ""
 	print 'Training RandomForestClassifier on data...'
 	rf = RandomForest(1000)
-	rf.fit(data, classes)
-
-	print 'Saving the classifier...'
-	p_file ='/'.join(matrix_path.split('/')[:-1]) +'classifier.RF.p'
-	rf.save(p_file)
-
-	# Analyze Classifier
-	rf.quick_stats()
-	tree_depth_stats = rf.analyze_tree_depths()
 	
-	# Write all feature importances and original data matrix to a file
-	np.save(matrix_path + '_RF_feature_importance', rf.classifier.feature_importances_)
+	for i in xrange(n_iter-1):
+		rf.fit(data, classes)
+
+		print 'Saving the classifier...'
+		p_file ='/'.join(matrix_path.split('/')[:-1]) +'classifier.RF.p'
+		rf.save(p_file)
+
+		# Analyze Classifier
+		rf.quick_stats()
+		tree_depth_stats = rf.analyze_tree_depths()
+		
+		# Write all feature importances and original data matrix to a file
+		np.save(matrix_path + '_RF_feature_importance_'+i, rf.classifier.feature_importances_)
+
 	np.save(matrix_path + '_snps', labels)
 	np.save(matrix_path, matrix)
 
