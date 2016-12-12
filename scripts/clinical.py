@@ -31,7 +31,7 @@ def get_clinical(filename):
 			
 		patient_info[patient] = {
 			'years_to_birth': info['years_to_birth'][i],
-			#'pathologic_stage': path,
+			'pathologic_stage': path,
 			'gender': info['gender'][i],
 			'race': info['race'][i],
 			'ethnicity': info['ethnicity'][i]
