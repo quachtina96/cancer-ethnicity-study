@@ -1,0 +1,5 @@
+RNA data exists for LGG LUAD and BRCA
+
+python randomforest.py /home/cancer-ethnicity-study/data/rna_data/BRCA rna 15 > /home/cancer-ethnicity-study/results/randomforest/rna/BRCA.rf.results.txt
+python randomforest.py /home/cancer-ethnicity-study/data/rna_data/LUAD rna 15 > /home/cancer-ethnicity-study/results/randomforest/rna/LUAD.rf.results.txt
+python randomforest.py /home/cancer-ethnicity-study/data/rna_data/LGG rna 15/home/cancer-ethnicity-study/results/randomforest/rna/LGG.rf.results.txt
