@@ -7,6 +7,7 @@ from glm import load_data
 def tukey(filename, cancer):
 	data, patients, genes, master_df, clinical, indices_to_delete = load_data(filename, cancer)
 	items = []
+	outfile = open(filename + '.posthoc.txt', 'w')
 	with open(filename + '_pvals.corrected.tsv', 'r') as f:
 		for line in f:
 			parts = line.strip().split('\t')
@@ -17,8 +18,8 @@ def tukey(filename, cancer):
 			items.append((ind, gene, pval))
 
 	sorted_items = sorted(items,key=lambda x:(x[2],x[0]))
-
-	for tup in sorted_items[:10]:
+	print 'Items sorted by p-values'
+	for tup in sorted_items[:20]:
 		ind = tup[0]
 		expression_data = [item for a, item in enumerate(list(data[ind])) if a not in indices_to_delete]
 		df = master_df.copy()
@@ -27,7 +28,25 @@ def tukey(filename, cancer):
 
 		mc = MultiComparison(df['expression'], df['race'])
 		result = mc.tukeyhsd()
-		print(result)
-		print(mc.groupsunique)
+		outfile.write(str(tup[1]) + '\n')
+		outfile.write(str(result) + '\n')
+		outfile.write(str(mc.groupsunique) + '\n' + '\n')
+	print 'Post-hoc output available at ' + filename + '.posthoc.txt'
 
-tukey('../data/BRCA/BRCA', 'BRCA')
+def main():
+
+    """Checks if we have the right number of command line arguments
+       and reads them in"""
+    if len(sys.argv) < 1:
+        print "you must call program as: python ./posthoc.py <datafile> <cancertype>"
+        sys.exit(1)
+
+    filename = sys.argv[1]
+    cancer_type = sys.argv[2]
+    tukey(filename, cancer_type)
+
+if __name__ == "__main__":
+    main()
+
+#tukey('../data/BRCA/BRCA', 'BRCA')
+

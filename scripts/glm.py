@@ -58,8 +58,7 @@ def load_data(filename, cancer):
 			indices_to_delete.add(int(j))
 
 	index = [item for a, item in enumerate(index) if a not in indices_to_delete]
-	print len(index)
-	print len(patient_data['gender'])
+	print 'Number of cases: ' + str(len(index))
 
 	assert len(index) == len(patient_data['gender'])
 	master_df = pd.DataFrame(patient_data, index=index)
