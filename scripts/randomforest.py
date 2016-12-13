@@ -13,6 +13,7 @@ import pickle
 from sklearn.ensemble import RandomForestClassifier
 from feature_importance import FeatureImportances
 import RNAreader
+import pprint
 
 class RandomForest:
 	def __init__(self, n_estimators):
@@ -220,15 +221,16 @@ if __name__ == '__main__':
 
 	# Sort the filtered features 
 	sorted_by_std = sorted(feature_std_map.items(), key=operator.itemgetter(1))
+	print ""
 	print 'Identified %d features' %(len(feature_std_map.keys()))
 	for item in reversed(sorted_by_std):
 		feature = item[0]
 		std = item[1]
 		print "%s %f" %(feature, std)
 		print 'What proportion of each race or ethnicity has the specific trait?'
-		print identified_features_info[feature]['proportions']
+		pprint(dict(identified_features_info[feature]['proportions']))
 		print "How many people in each race had the specific trait?"
-		print identified_features_info[feature]['counts']
+		pprint(dict(identified_features_info[feature]['counts']))
 
 
 
