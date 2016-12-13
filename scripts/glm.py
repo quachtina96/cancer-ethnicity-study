@@ -40,7 +40,7 @@ def load_data(filename, cancer):
 			'age': [],
 			'gender': [],
 			'race': [],
-			'stage': []
+			#'stage': []
 	}
 
 	indices_to_delete = set()
@@ -54,7 +54,7 @@ def load_data(filename, cancer):
 				patient_data['age'].append(int(info['years_to_birth']))
 				patient_data['gender'].append(info['gender'])
 				patient_data['race'].append(info['race'])
-				patient_data['stage'].append(info['pathologic_stage'])
+				#patient_data['stage'].append(info['pathologic_stage'])
 		else:
 			indices_to_delete.add(int(j))
 	print patient_data
@@ -86,8 +86,8 @@ def run_all(filename, cancer):
 	print 'Output available at ' + filename + '_pvals.tsv'
 
 def anova(data):
-	mod = ols('expression ~ age + gender + C(race) + C(stage)', data=data).fit()
-	#mod = ols('expression ~ age + gender + C(race)', data=data).fit()
+	#mod = ols('expression ~ age + gender + C(race) + C(stage)', data=data).fit()
+	mod = ols('expression ~ age + gender + C(race)', data=data).fit()
 	aov_table = sm.stats.anova_lm(mod)
 	return float(aov_table.loc['C(race)']['PR(>F)'])
 
