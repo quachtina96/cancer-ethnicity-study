@@ -21,7 +21,6 @@ data = filtered[:,1:-2]
 races = filtered[:,-2]
 classes = races
 
-
 # Construct the matrix to visualize
 patients = patients[:60]
 selected = selected[:20]

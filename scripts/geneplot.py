@@ -8,7 +8,7 @@ import csv
 # Get the expression data for those 20 genes
 # Plot that shiz
 
-filename = '../data/BRCA'
+filename = '../data/BRCA/'
 data = np.load(open('../data/BRCA.data.txt.matrix.npy'))
 patients = []
 genes = []
