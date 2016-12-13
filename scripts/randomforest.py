@@ -21,7 +21,7 @@ class RandomForest:
 		self.n_estimators = n_estimators
 
 	def fit(self, data, classes):
-		self.classifier = RandomForestClassifier(n_estimators=self.n_estimators, oob_score=True, verbose=1, class_weight="balanced")
+		self.classifier = RandomForestClassifier(n_estimators=self.n_estimators, oob_score=True, verbose=1, class_weight="auto")
 		self.classifier = self.classifier.fit(data, classes)
 		self.tree_depths = self.get_tree_depths()
 		return self.classifier
