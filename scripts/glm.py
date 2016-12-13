@@ -47,6 +47,7 @@ def load_data(filename, cancer):
 	for j, patient in enumerate(index):
 		if patient in clinical:
 			info = clinical[patient]
+			print info
 			if 'NA' in info.values():
 				indices_to_delete.add(int(j))
 			else:
@@ -70,7 +71,7 @@ def load_data(filename, cancer):
 
 def run_all(filename, cancer):
 	data, patients, genes, master_df, clinical, indices_to_delete = load_data(filename, cancer)
-	
+
 	outfile = open(filename + '_pvals.tsv', 'w')
 	for i, gene in enumerate(genes):
 		expression_data = [item for a, item in enumerate(list(data[i])) if a not in indices_to_delete]
