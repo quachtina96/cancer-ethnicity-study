@@ -1,0 +1,136 @@
+Conducting Random Forest analysis on RNA data...
+Reading ../data/rna_data/LGG/LGG.data.txt.matrix.npy
+Reading ../data/rna_data/LGG/LGG.data.txt.genes.csv
+Reading ../data/rna_data/LGG/LGG.data.txt.patients.csv
+Reading ../data/rna_data/LGG/LGG.clinical/LGG.clin.merged.picked.txt.saved.p
+All saved RNA files read
+
+Training RandomForestClassifier on data...
+Saving the classifier...
+Classes: ['american indian or alaska native' 'asian' 'black or african american'
+ 'white']
+OOB Score: 0.940154
+Number of Outputs: 1
+Feature Importances
+Standard Deviation: 0.000154
+Max: 0.003584
+Mean: 0.000049
+Median: 0.000000
+Min: 0.000000
+
+Tree_Depth
+Max: 15.000000
+Mean: 5.000000
+Median: 5.000000
+Min: 5.000000
+
+The 50 Most Important Features
+0.003584 TMEM22
+0.003419 LIMK2
+0.002747 CHP
+0.002492 HSPB1
+0.002391 SRCRB4D
+0.002372 DNASE1
+0.002348 GTPBP1
+0.002318 SRPRB
+0.002278 PPP1R1C
+0.002244 C9orf82
+0.002199 ALDH3A1
+0.002111 C21orf56
+0.002089 CXCR7
+0.002084 LOC90784
+0.002045 COQ9
+0.002036 ULK4
+0.001953 KAAG1
+0.001931 TMEM69
+0.001927 GUSBL1
+0.001904 NAT1
+0.001885 AARS2
+0.001867 SRP68
+0.001806 SNX24
+0.001783 PCOLCE2
+0.001779 WFDC1
+0.001776 FAM18B
+0.001748 MAGI3
+0.001730 RAB1A
+0.001716 SCNN1B
+0.001715 ARMC10
+0.001692 PDCD11
+0.001690 ALOX15B
+0.001682 PPIL3
+0.001623 PEX11A
+0.001583 FAM182A
+0.001557 UTRN
+0.001553 ABCA12
+0.001528 GSX2
+0.001522 S1PR2
+0.001494 RELT
+0.001490 VNN1
+0.001489 TMOD1
+0.001475 RNFT2
+0.001464 DLD
+0.001450 TSPAN10
+0.001440 VSIG10
+0.001436 ATP2B4
+0.001426 HEBP1
+0.001423 AQP6
+0.001411 POLR2J2
+
+Identified 4 features
+
+KAAG1
+0.342977
+What proportion of each race or ethnicity has the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 0.25,
+ 'black or african american': 0.22727272727272727,
+ 'white': 0.15811088295687886}
+How many people in each race had the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 2.0,
+ 'black or african american': 5.0,
+ 'white': 77.0}
+
+GSX2
+0.233960
+What proportion of each race or ethnicity has the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 0.375,
+ 'black or african american': 0.5454545454545454,
+ 'white': 0.5236139630390144}
+How many people in each race had the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 3.0,
+ 'black or african american': 12.0,
+ 'white': 255.0}
+
+SCNN1B
+0.176387
+What proportion of each race or ethnicity has the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 0.625,
+ 'black or african american': 0.7272727272727273,
+ 'white': 0.5277207392197125}
+How many people in each race had the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 5.0,
+ 'black or african american': 16.0,
+ 'white': 257.0}
+
+FAM182A
+0.156947
+What proportion of each race or ethnicity has the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 0.625,
+ 'black or african american': 1.0,
+ 'white': 0.9548254620123203}
+How many people in each race had the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 5.0,
+ 'black or african american': 22.0,
+ 'white': 465.0}
+KAAG1
+GSX2
+SCNN1B
+FAM182A
+Could not save the selected features info

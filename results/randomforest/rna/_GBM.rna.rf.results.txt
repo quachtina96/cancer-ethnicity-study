@@ -1,0 +1,135 @@
+Conducting Random Forest analysis on RNA data...
+Reading ../data/rna_data/GBM/GBM.data.txt.matrix.npy
+Reading ../data/rna_data/GBM/GBM.data.txt.genes.csv
+Reading ../data/rna_data/GBM/GBM.data.txt.patients.csv
+Reading ../data/rna_data/GBM/GBM.clinical/GBM.clin.merged.picked.txt.saved.p
+All saved RNA files read
+
+Training RandomForestClassifier on data...
+Saving the classifier...
+Classes: ['asian' 'black or african american' 'white']
+OOB Score: 0.901840
+Number of Outputs: 1
+Feature Importances
+Standard Deviation: 0.000146
+Max: 0.002659
+Mean: 0.000049
+Median: 0.000000
+Min: 0.000000
+
+Tree_Depth
+Max: 9.000000
+Mean: 3.000000
+Median: 3.000000
+Min: 3.000000
+
+The 50 Most Important Features
+0.002659 PPAP2A
+0.002607 HMGCL
+0.002476 GSTM1
+0.002361 KIAA1804
+0.002246 DECR2
+0.002072 MOXD1
+0.002060 GSDMC
+0.002045 BET1
+0.002015 ADIPOR2
+0.001851 ACAA2
+0.001713 IFLTD1
+0.001676 SPDYE3
+0.001661 LECT1
+0.001661 EID2B
+0.001633 SHFM1
+0.001626 COL8A1
+0.001624 C6orf182
+0.001549 HS1BP3
+0.001527 FOXD4L1
+0.001514 TRPC3
+0.001514 DSEL
+0.001505 PHF19
+0.001504 C17orf70
+0.001489 LOC255167
+0.001488 CASD1
+0.001475 C6orf221
+0.001475 LRRK2
+0.001453 APOB
+0.001449 LHX2
+0.001444 LRRC4C
+0.001443 ZNF606
+0.001441 TMC1
+0.001432 TMEM187
+0.001396 LOC401588
+0.001368 OLIG2
+0.001366 CPA5
+0.001350 GIPC2
+0.001349 C2orf74
+0.001318 VILL
+0.001312 LOC441666
+0.001305 MEGF10
+0.001303 FAM160A1
+0.001287 LOC222699
+0.001286 ZNF256
+0.001282 TXNDC11
+0.001263 EP400NL
+0.001257 LOC148413
+0.001256 MTMR4
+0.001229 ASAP2
+0.001209 GRAMD1B
+
+Identified 6 features
+
+TMC1
+0.315962
+What proportion of each race or ethnicity has the specific trait?
+{'asian': 0.2,
+ 'black or african american': 0.9090909090909091,
+ 'white': 0.8231292517006803}
+How many people in each race had the specific trait?
+{'asian': 1.0, 'black or african american': 10.0, 'white': 121.0}
+
+APOB
+0.295884
+What proportion of each race or ethnicity has the specific trait?
+{'asian': 0.2,
+ 'black or african american': 0.8181818181818182,
+ 'white': 0.8367346938775511}
+How many people in each race had the specific trait?
+{'asian': 1.0, 'black or african american': 9.0, 'white': 123.0}
+
+C6orf221
+0.293187
+What proportion of each race or ethnicity has the specific trait?
+{'asian': 0.8,
+ 'black or african american': 0.09090909090909091,
+ 'white': 0.3469387755102041}
+How many people in each race had the specific trait?
+{'asian': 4.0, 'black or african american': 1.0, 'white': 51.0}
+
+FAM160A1
+0.217301
+What proportion of each race or ethnicity has the specific trait?
+{'asian': 0.4,
+ 'black or african american': 0.9090909090909091,
+ 'white': 0.7891156462585034}
+How many people in each race had the specific trait?
+{'asian': 2.0, 'black or african american': 10.0, 'white': 116.0}
+
+GIPC2
+0.182487
+What proportion of each race or ethnicity has the specific trait?
+{'asian': 0.6, 'black or african american': 1.0, 'white': 0.9727891156462585}
+How many people in each race had the specific trait?
+{'asian': 3.0, 'black or african american': 11.0, 'white': 143.0}
+
+LECT1
+0.168071
+What proportion of each race or ethnicity has the specific trait?
+{'asian': 0.6, 'black or african american': 1.0, 'white': 0.8843537414965986}
+How many people in each race had the specific trait?
+{'asian': 3.0, 'black or african american': 11.0, 'white': 130.0}
+TMC1
+APOB
+C6orf221
+FAM160A1
+GIPC2
+LECT1
+Could not save the selected features info

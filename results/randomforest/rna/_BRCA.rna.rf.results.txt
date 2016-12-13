@@ -1,0 +1,162 @@
+Conducting Random Forest analysis on RNA data...
+Reading ../data/rna_data/BRCA/BRCA.data.txt.matrix.npy
+Reading ../data/rna_data/BRCA/BRCA.data.txt.genes.csv
+Reading ../data/rna_data/BRCA/BRCA.data.txt.patients.csv
+Reading ../data/rna_data/BRCA/BRCA.clinical/BRCA.clin.merged.picked.txt.saved.p
+All saved RNA files read
+
+Training RandomForestClassifier on data...
+Saving the classifier...
+Classes: ['american indian or alaska native' 'asian' 'black or african american'
+ 'white']
+OOB Score: 0.802691
+Number of Outputs: 1
+Feature Importances
+Standard Deviation: 0.000138
+Max: 0.003300
+Mean: 0.000049
+Median: 0.000022
+Min: 0.000000
+
+Tree_Depth
+Max: 28.000000
+Mean: 9.000000
+Median: 9.000000
+Min: 9.000000
+
+The 50 Most Important Features
+0.003300 UTS2
+0.003113 ARHGDIA
+0.002846 IGSF9
+0.002832 FLJ90757
+0.002721 MAFG
+0.002679 PCYT2
+0.002599 FADS2
+0.002467 CCDC137
+0.002437 CEP72
+0.002371 ALDH7A1
+0.002366 CHIT1
+0.002317 HTN3
+0.002299 SLC5A11
+0.002182 FAM86B1
+0.002137 VBP1
+0.002114 ANKRD56
+0.002085 TAGLN2
+0.002033 LOC653113
+0.001963 MDH1B
+0.001942 LOC440461
+0.001899 SIRT7
+0.001897 CHMP6
+0.001871 ADAMTS2
+0.001855 PDP1
+0.001837 LOC92659
+0.001836 CPNE3
+0.001804 CRYBB2
+0.001801 SLC5A1
+0.001780 ZP1
+0.001775 CTNNBIP1
+0.001753 NRTN
+0.001751 FN3KRP
+0.001747 PPIL3
+0.001745 ZNF35
+0.001720 OR52N1
+0.001711 OR52N5
+0.001695 C14orf167
+0.001687 BHLHB9
+0.001672 DOLPP1
+0.001669 TOMM40L
+0.001662 GSDMA
+0.001590 DHRS2
+0.001584 HSPA4L
+0.001581 SLC41A3
+0.001577 AP2B1
+0.001572 CROCCL1
+0.001563 ACP6
+0.001552 PSMB3
+0.001539 FAM3A
+0.001535 NPLOC4
+
+Identified 6 features
+
+HTN3
+0.463246
+What proportion of each race or ethnicity has the specific trait?
+{'american indian or alaska native': 1.0,
+ 'black or african american': 0.031746031746031744,
+ 'white': 0.0034762456546929316}
+How many people in each race had the specific trait?
+{'american indian or alaska native': 1.0,
+ 'black or african american': 6.0,
+ 'white': 3.0}
+
+OR52N1
+0.417433
+What proportion of each race or ethnicity has the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 0.04838709677419355,
+ 'black or african american': 0.037037037037037035,
+ 'white': 0.023174971031286212}
+How many people in each race had the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 3.0,
+ 'black or african american': 7.0,
+ 'white': 20.0}
+
+OR52N5
+0.416427
+What proportion of each race or ethnicity has the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 0.016129032258064516,
+ 'black or african american': 0.05291005291005291,
+ 'white': 0.047508690614136734}
+How many people in each race had the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 1.0,
+ 'black or african american': 10.0,
+ 'white': 41.0}
+
+UTS2
+0.255659
+What proportion of each race or ethnicity has the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 0.8548387096774194,
+ 'black or african american': 0.5396825396825397,
+ 'white': 0.3499420625724218}
+How many people in each race had the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 53.0,
+ 'black or african american': 102.0,
+ 'white': 302.0}
+
+ZP1
+0.208914
+What proportion of each race or ethnicity has the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 0.5,
+ 'black or african american': 0.5608465608465608,
+ 'white': 0.5017381228273464}
+How many people in each race had the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 31.0,
+ 'black or african american': 106.0,
+ 'white': 433.0}
+
+CRYBB2
+0.185252
+What proportion of each race or ethnicity has the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 0.6612903225806451,
+ 'black or african american': 0.9047619047619048,
+ 'white': 0.5365005793742758}
+How many people in each race had the specific trait?
+{'american indian or alaska native': 1.0,
+ 'asian': 41.0,
+ 'black or african american': 171.0,
+ 'white': 463.0}
+HTN3
+OR52N1
+OR52N5
+UTS2
+ZP1
+CRYBB2
+Could not save the selected features info
