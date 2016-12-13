@@ -4,6 +4,7 @@ data from TCGA (The Cancer Genome Atlas) on GDC (Genomic Data Commons).
 
 @author Tina Quach (quacht@mit.edu)
 '''
+import operator
 import os
 import subprocess
 import sys
@@ -212,7 +213,8 @@ if __name__ == '__main__':
 
 	# Filter the features based on proportions.
 	feature_std_map = {}
-	for feature in identified_features_info:
+	feature_list = identified_features_info.keys()
+	for feature in feature_list:
 		identified_features_info[feature]['std'] = np.std(identified_features_info[feature]['proportions'].values())
 		if identified_features_info[feature]['std'] < .15:
 			del identified_features_info[feature]
@@ -226,13 +228,21 @@ if __name__ == '__main__':
 	for item in reversed(sorted_by_std):
 		feature = item[0]
 		std = item[1]
-		print "%s %f" %(feature, std)
+		print ""
+		print "%s" %(feature)
+		print "%f" %(std)
 		print 'What proportion of each race or ethnicity has the specific trait?'
-		pprint(dict(identified_features_info[feature]['proportions']))
+		pprint.pprint(dict(identified_features_info[feature]['proportions']))
 		print "How many people in each race had the specific trait?"
-		pprint(dict(identified_features_info[feature]['counts']))
+		pprint.pprint(dict(identified_features_info[feature]['counts']))
+	
+	for item in reversed(sorted_by_std):
+		print item[0]
+	try:
+		filename = os.path.join(directory, 'selected.features.p')
+		pickle.dump(identified_features_info, open(filename,'wb'))	
+	except:
+		print "Could not save the selected features info"
 
 
-
-
-
+	
