@@ -12,7 +12,7 @@ def main():
     filepath = sys.argv[1] # data/BRCA/BRCA
     cancertype = sys.argv[2]
 
-    clinical_file = filepath + "/" + cancertype + ".clinical/" + cancertype + ".clin.merged.picked.txt"
+    clinical_file = filepath + ".clinical/" + cancertype + ".clin.merged.picked.txt"
     pval_file = filepath + "_pvals.tsv"
 
     os.system('python rna.py ' + filepath + ".data.txt")
