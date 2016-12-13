@@ -18,6 +18,7 @@ def tukey(filename, cancer):
 			items.append((ind, gene, pval))
 
 	sorted_items = sorted(items,key=lambda x:(x[2],x[0]))
+	print master_df
 	print 'Items sorted by p-values'
 	for tup in sorted_items[:20]:
 		ind = tup[0]
