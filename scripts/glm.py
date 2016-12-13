@@ -57,9 +57,9 @@ def load_data(filename, cancer):
 				patient_data['stage'].append(info['pathologic_stage'])
 		else:
 			indices_to_delete.add(int(j))
-
+	print patient_data
 	index = [item for a, item in enumerate(index) if a not in indices_to_delete]
-	print 'NUmber of cases deleted: ' + str(len(indices_to_delete))
+	print 'Number of cases deleted: ' + str(len(indices_to_delete))
 	print 'Number of cases remaining: ' + str(len(index))
 
 	assert len(index) == len(patient_data['gender'])
