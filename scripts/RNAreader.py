@@ -90,4 +90,4 @@ def read_rna(directory):
 	assert(matrix.shape[1] == len(genes))
 	# Get the names of the genes (feature labels)
 	labels = genes	
-	return matrix, classes, labels
+	return matrix_file, matrix, classes, labels

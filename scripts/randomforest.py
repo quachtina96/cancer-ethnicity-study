@@ -141,7 +141,8 @@ if __name__ == '__main__':
 		matrix = snp_matrix
 		np.save(matrix_path, matrix)
 	elif matrix_type == 'rna':
-		data, classes, labels = RNAreader.read_rna(directory) 
+
+		matrix_path, data, classes, labels = RNAreader.read_rna(directory) 
 		assert(np.ma.is_masked(data))
 		data = np.array([line for line in data if np.ma.is_masked(line)])
 		classes = np.array(classes)
