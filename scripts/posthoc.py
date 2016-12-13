@@ -8,6 +8,7 @@ def tukey(filename, cancer):
 	data, patients, genes, master_df, clinical, indices_to_delete = load_data(filename, cancer)
 	items = []
 	outfile = open(filename + '.posthoc.txt', 'w')
+	genefile = open(filename + '_finalsnps.txt', 'w')
 	with open(filename + '_pvals.corrected.tsv', 'r') as f:
 		for line in f:
 			parts = line.strip().split('\t')
@@ -18,7 +19,7 @@ def tukey(filename, cancer):
 			items.append((ind, gene, pval))
 
 	sorted_items = sorted(items,key=lambda x:(x[2],x[0]))
-	print master_df
+
 	print 'Items sorted by p-values'
 	for tup in sorted_items[:20]:
 		ind = tup[0]
@@ -29,6 +30,7 @@ def tukey(filename, cancer):
 
 		mc = MultiComparison(df['expression'], df['race'])
 		result = mc.tukeyhsd()
+		genefile.write(str(tup[0]) + '\t' + str(tup[1]) + '\t' + str(tup[2]) + '\n')
 		outfile.write(str(tup[1]) + '\n')
 		outfile.write(str(result) + '\n')
 		outfile.write(str(mc.groupsunique) + '\n' + '\n')
