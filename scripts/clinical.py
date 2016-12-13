@@ -36,12 +36,8 @@ def get_clinical(filename):
 			'race': info['race'][i],
 			'ethnicity': info['ethnicity'][i]
 		}
-
+		print patient_info[patient]
 	pickle.dump(patient_info, open(filename + '.saved.p','wb'))	
-
-# file = '../data/BRCA/BRCA.clinical/BRCA.clin.merged.picked.txt'
-# get_clinical(file)
-# pickle.load(open(file + '.saved.p', 'rb'))
 
 def main():
 
