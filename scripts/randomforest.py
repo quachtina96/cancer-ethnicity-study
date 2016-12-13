@@ -147,7 +147,7 @@ if __name__ == '__main__':
 		assert(np.ma.is_masked(data))
 		data = np.array([line for line in data if not np.ma.is_masked(line)])
 		classes = np.array(classes)
-		# print data.shape
+		matrix_path = '/home/cancer-ethnicity-study/results/randomforest/rna'
 	else:
 		print "Invalid matrix type. Must be 'snp' or 'rna'"
 		sys.exit(1)
@@ -162,7 +162,6 @@ if __name__ == '__main__':
 		print 'Saving the classifier...'
 		try:
 			p_file = '/'.join(matrix_path.split('/')) + 'classifier.RF.p'
-			#p_file ='/'.join(matrix_path.split('/')) + 'classifier.RF.p'
 			rf.save(p_file)
 		except:
 			print 'Could not save the classifier due to permissions'
@@ -177,8 +176,7 @@ if __name__ == '__main__':
 			np.save(feature_importance_file, rf.classifier.feature_importances_)
 		except:
 			print 'Could not save feature importances'
-			#os.system('sudo chmod 777 '+ feature_importance_file)
-			#np.save(feature_importance_file, rf.classifier.feature_importances_)
+
 	if matrix_type == 'snp':
 		np.save(os.path.join(directory,'feature_labels'), labels)
 		np.save(matrix_path, matrix)
@@ -198,22 +196,41 @@ if __name__ == '__main__':
 		print ""
 	
 	# Analyze feature importance to get the best
-	print "The %d Most Important SNPs" %(n_features)
+	print "The %d Most Important Features" %(n_features)
 	feature_to_importance = fi.get_feature_importance_map(n_features)
 	fi.pretty_print_map(n_features)
 
+	identified_features_info = defaultdict(defaultdict)
 	for index in fi.get_most_important_features_indices(n_features):
-		snp_id = labels[index] 
-		print ""
-		print snp_id
-		print 'What proportion of each race or ethnicity has the specific trait?'
+		feature = labels[index] 
 		proportions = getClassProportions(data, classes, index)
-		print dict(proportions)
-		print "What is the distribution of a certain SNP's occurrence over the observed races?"
-		print "First, counts:"
 		counts = getCountsOverClasses(data, classes, index, False)
-		print dict(counts)
-		print "Second, normalized distribution"
-		renormalize(counts)
-		print dict(counts)
-	#print "Did not successfully do meta analysis on the feature importances"
+		identified_features_info[feature]['index'] = index
+		identified_features_info[feature]['proportions'] = proportions
+		identified_features_info[feature]['counts'] = counts
+
+	# Filter the features based on proportions.
+	feature_std_map = {}
+	for feature in identified_features_info:
+		identified_features_info[feature]['std'] = np.std(identified_features_info[feature]['proportions'].values())
+		if identified_features_info[feature]['std'] < .15:
+			del identified_features_info[feature]
+		else:
+			feature_std_map[feature] = identified_features_info[feature]['std']
+
+	# Sort the filtered features 
+	sorted_by_std = sorted(feature_std_map.items(), key=operator.itemgetter(1))
+	print 'Identified %d features' %(len(feature_std_map.keys()))
+	for item in reversed(sorted_by_std):
+		feature = item[0]
+		std = item[1]
+		print "%s %f" %(feature, std)
+		print 'What proportion of each race or ethnicity has the specific trait?'
+		print identified_features_info[feature]['proportions']
+		print "How many people in each race had the specific trait?"
+		print identified_features_info[feature]['counts']
+
+
+
+
+
