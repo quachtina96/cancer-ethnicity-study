@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import pickle
 import seaborn as sns
 import csv
 
@@ -10,21 +11,17 @@ import csv
 
 
 filename = '../data/BRCA/BRCA'
+cancer = 'BRCA'
 data = np.load(open('../data/BRCA/BRCA.data.txt.matrix.npy'))
 patients = []
 genes = []
 
-# month = gene
-# year = patient
-# passengers = level
+with open(filename +'_finalsnps.txt', 'rb') as genefile:
+	for line in genefile:
+		parts = line.strip().split('\t')
+		tup = (int(parts[0]), parts[1], float(parts[2]))
 
-with open(filename +'.data.txt.genes.csv', 'rb') as csvfile:
-	reader = csv.reader(csvfile)
-	count = 0
-	for row in reader:
-		for item in row:
-			genes.append(item)
-			count += 1
+		genes.append(tup)
 
 with open(filename + '.data.txt.patients.csv', 'rb') as f:
 	reader = csv.reader(f)
@@ -34,22 +31,49 @@ with open(filename + '.data.txt.patients.csv', 'rb') as f:
 			patient_count += 1
 			patients.append('-'.join(item.strip().split('-')[:3]))
 
-patients = patients[:60]
-genes = genes[:20]
+clinical = pickle.load(open(filename + '.clinical/' + cancer + '.clin.merged.picked.txt.saved.p'))
+reordered = []
+baa = []
+na = []
+ai = []
+white = []
+asian = []
+
+for i, patient in enumerate(patients):
+	rae = 'NA'
+	if patient in clinical:
+		race = clinical[patient]['race'].strip()
+	if race == 'white':
+		white.append((i, patient))
+	elif race == 'black or african american':
+		baa.append((i, patient))
+	elif race == 'american indian or alaska native':
+		ai.append((i, patient))
+	elif race == 'asian':
+		asian.append((i, patient))
+	else:
+		na.append((i, patient))
+reordered = white + asian + baa + ai + na
 
 a = []
-for patient in patients:
+for i, patient in enumerate(patients):
 	for gene in genes:
-		a.append(patient)
+		a.append(i)
+
 b = []
 for patient in patients:
-	for gene in genes:
+	for ind, gene, pval in genes:
 		b.append(gene)
 
+# c = []
+# for i, patient in enumerate(patients):
+# 	for ind, gene, pval in genes:
+# 		c.append(data[ind][i])
+
 c = []
-for i, patient in enumerate(patients):
-	for j, gene in enumerate(genes):
-		c.append(data[j][i])
+for i, patient in reordered:
+	for ind, gene, pval in genes:
+		c.append(data[ind][i])
 
 matrix = {
 	'patient': a,
@@ -59,9 +83,10 @@ matrix = {
 
 
 df = pd.DataFrame(matrix, columns=['patient', 'gene', 'expression'])
+df = pd.pivot_table(df,values='expression',index='gene',columns='patient')
 
-df = df.pivot("gene", "patient", "expression")
-ax = sns.heatmap(df)
+ax = sns.heatmap(df, xticklabels = 200, cmap='Reds')
+
 sns.plt.yticks(rotation=0) 
 sns.plt.xticks(rotation=270)
 sns.plt.show()
