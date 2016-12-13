@@ -25,7 +25,7 @@ def tukey(filename, cancer):
 		expression_data = [item for a, item in enumerate(list(data[ind])) if a not in indices_to_delete]
 		df = master_df.copy()
 		df['expression'] = pd.Series(expression_data, index=master_df.index)
-		assert len(df['expression']) == len(df['gender']) == len(df['stage']) == len(df['race']) == len(df['age'])
+		assert len(df['expression']) == len(df['gender']) == len(df['race']) == len(df['age'])
 
 		mc = MultiComparison(df['expression'], df['race'])
 		result = mc.tukeyhsd()
