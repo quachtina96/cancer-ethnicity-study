@@ -30,11 +30,13 @@ class RandomForest:
 
 	def save(self, classifier_file):
 		if self.classifier:
-			os.system('sudo chmod 777 ' + classifier_file)
-			p_file = open(classifier_file ,'w+')
-			p = pickle.dump(self.classifier, p_file, protocol=2)
+			try:
+				p_file = open(classifier_file ,'w+')
+				p = pickle.dump(self.classifier, p_file, protocol=2)
+			except:
+				'Could not save classifier.'
 		else:
-			print 'Could not save classifier. Empty file.'
+			print 'Could not save classifier.'
 
 	def load(self, pickle_file):
 		try:
