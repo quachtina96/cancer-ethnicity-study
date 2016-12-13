@@ -26,21 +26,27 @@ def read_mini(mini):
 		features.append(name)
 	return (scores,features)
 
-# Get selected SNPs:
-minidir = '../results/randomforest'
-minidir = '../results/rna_plot'
-cancer_types = ['BRCA', 'GBM', 'LGG', 'LUAD', 'LUSC']
+if __name__ == "__main__":
+    """Checks if we have the right number of command line arguments
+       and reads them in"""
+    if len(sys.argv) < 1:
+        print "you must call program as: python ./geneplot.py <all_caps_cancer_type>"
+        sys.exit(1)
 
-for cancer in cancer_types:
+    cancer = sys.argv[1]
+
+	# Get selected SNPs:
+	minidir = '../results/randomforest/rna'
+
 	minifile = cancer + '.rf.selected.txt'
 	with open(os.path.join(minidir,minifile), 'r') as content_file:
 	    content = content_file.read()
 	scores, features = read_mini(content)
+	print 'Features'
+	print feature
 	selected = features[:20]
-	# You want to choose top 20 genes
-	# Plot that shiz
-	cancer = 'BRCA'
-	filename = '../data/rna_data/' + cancer
+
+	filename = '../data/rna_data/' + cancer + '/'+ cancer
 	data = np.load(open(filename + '.data.txt.matrix.npy'))
 	patients = []
 	genes = []
@@ -53,6 +59,10 @@ for cancer in cancer_types:
 			for item in row:
 				genes.append(item)
 				count += 1
+
+	for gene in selected:
+		try:
+			= list(genes).index(gene)
 
 	with open(filename + '.data.txt.patients.csv', 'rb') as f:
 		reader = csv.reader(f)
@@ -95,11 +105,6 @@ for cancer in cancer_types:
 	for patient in patients:
 		for gene in selected:
 			b.append(gene)
-
-	# c = []
-	# for i, patient in enumerate(patients):
-	# 	for ind, gene, pval in genes:
-	# 		c.append(data[ind][i])
 
 	c = []
 	for i, patient in reordered:
