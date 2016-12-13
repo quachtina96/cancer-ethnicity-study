@@ -142,7 +142,10 @@ if __name__ == '__main__':
 		np.save(matrix_path, matrix)
 	elif matrix_type == 'rna':
 		data, classes, labels = RNAreader.read_rna(directory) 
-		print data.shape
+		assert(np.ma.is_masked(data))
+		data = np.array([line for line in data if np.ma.is_masked(line)])
+		classes = np.array(classes)
+		# print data.shape
 	else:
 		print "Invalid matrix type. Must be 'snp' or 'rna'"
 		sys.exit(1)
@@ -152,7 +155,7 @@ if __name__ == '__main__':
 	rf = RandomForest(1000)
 	
 	for i in xrange(n_iter):
-		rf.fit(data, np.array(classes))
+		rf.fit(data, classes)
 
 		print 'Saving the classifier...'
 		p_file ='/'.join(matrix_path.split('/')[:-1]) +'classifier.RF.p'

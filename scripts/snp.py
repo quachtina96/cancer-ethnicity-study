@@ -87,7 +87,7 @@ def mapPatientBarcodeToUUID(barcode_to_uuid_map, snp_data):
     barcodes = snp_data["Tumor_Sample_Barcode"]
     for i in xrange(len(uuids)):
         uuid = uuids[i]
-        barcode = '-'.join(barcodes[i].split('-')[:4])
+        barcode = '-'.join(barcodes[i].split('-')[:3])
         # Use the first four sections of the barcode.
         barcode_to_uuid_map[barcode] = uuid
 
@@ -146,7 +146,7 @@ def formMatrix(snpSet, sample_to_snps, barcode_to_uuid_map, empty_file):
     output_file.write('\n')
 
     for barcode in sample_to_snps: 
-        print barcode
+        #print barcode
         row = [barcode]
         for snp in snps:
             if snp in sample_to_snps[barcode]:
@@ -155,7 +155,11 @@ def formMatrix(snpSet, sample_to_snps, barcode_to_uuid_map, empty_file):
                 row.append(0)
         # row += [1 if snp in sample_to_snps[identifier] else 0 for snp in snps]
         tumorUUID = barcode_to_uuid_map[barcode]
-        demographicInfo = demographic.getDemographicFromTumorUuid(tumorUUID)
+        #print 'barcode'
+        #print barcode
+        #print 'tumorUUID'
+        #print tumorUUID
+	demographicInfo = demographic.getDemographicFromTumorUuid(tumorUUID)
         if demographicInfo:
             race = demographicInfo.values()[0]
             ethnicity = demographicInfo.values()[1]
@@ -240,14 +244,15 @@ if __name__ == '__main__':
             if file.endswith("maf.txt"):
                 maf_list.append(os.path.join(root, file))
                 print os.path.join(root, file)
-    
-    matrix_filename = tumor_type_directory.split('/')[-1] + '_snp_matrix.tsv'
+    cancer_type = tumor_type_directory.split('/')[-1]
+    matrix_filename = cancer_type + '_snp_matrix.tsv'
     matrix_filepath = tumor_type_directory + "/"+ matrix_filename
+    variant_class_filename = matrix_filename + '.variant_classification.p'
 
     print "Processing MAF files..."
     processMAF(maf_list, matrix_filename)
     os.system('mv ' + matrix_filename + ' ' + matrix_filepath)
-    
+    os.system('mv ' + variant_class_filename  + ' ' + os.path.join(tumor_type_directory, variant_class_filename))    
     print "Matrix can be found at %s" %(matrix_filepath)
     print "SNP to Variant Classification can be found at %s" %(matrix_filepath + '.variant_classifcation.p')
 
