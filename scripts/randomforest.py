@@ -21,14 +21,15 @@ class RandomForest:
 		self.n_estimators = n_estimators
 
 	def fit(self, data, classes):
-		self.classifier = RandomForestClassifier(n_estimators=self.n_estimators, oob_score=True, verbose=1, class_weight="auto")
+		self.classifier = RandomForestClassifier(n_estimators=self.n_estimators,n_jobs=-1, oob_score=True, verbose=1, class_weight="auto")
 		self.classifier = self.classifier.fit(data, classes)
 		self.tree_depths = self.get_tree_depths()
 		return self.classifier
 
 	def save(self, classifier_file):
 		if self.classifier:
-			p_file = open(classifier_file ,'w')
+			os.system('sudo chmod 777 ' + classifier_file)
+			p_file = open(classifier_file ,'w+')
 			p = pickle.dump(self.classifier, p_file, protocol=2)
 		else:
 			print 'Could not save classifier. Empty file.'
@@ -83,11 +84,11 @@ def getCountsOverClasses(data, class_labels, index, opt_normalized):
 	races? This function gets the counts that you can normalize to get a 
 	distribution'''
 	feature_occurences = data[:, index]
-	print feature_occurences.shape
+	# print feature_occurences[:5]
 	counts = defaultdict(float)	
 	
 	for i in xrange(data.shape[0]):
-		if feature_occurences[i]:
+		if int(feature_occurences[i]):
 			counts[class_labels[i]] += 1
 	if opt_normalized:
 		renormalize(counts)
@@ -159,18 +160,28 @@ if __name__ == '__main__':
 		rf.fit(data, classes)
 
 		print 'Saving the classifier...'
-		p_file ='/'.join(matrix_path.split('/')[:-1]) +'classifier.RF.p'
-		rf.save(p_file)
+		try:
+			p_file = '/'.join(matrix_path.split('/')) + 'classifier.RF.p'
+			#p_file ='/'.join(matrix_path.split('/')) + 'classifier.RF.p'
+			rf.save(p_file)
+		except:
+			print 'Could not save the classifier due to permissions'
 
 		# Analyze Classifier
 		rf.quick_stats()
 		tree_depth_stats = rf.analyze_tree_depths()
 		
 		# Write all feature importances and original data matrix to a file
-		np.save(matrix_path + '_RF_feature_importance_'+i, rf.classifier.feature_importances_)
-
-	#np.save(os.path.join(directory,'feature_labels'), labels)
-	#np.save(matrix_path, matrix)
+		feature_importance_file = matrix_path + '_RF_feature_importance_'+str(i)
+		try:
+			np.save(feature_importance_file, rf.classifier.feature_importances_)
+		except:
+			print 'Could not save feature importances'
+			#os.system('sudo chmod 777 '+ feature_importance_file)
+			#np.save(feature_importance_file, rf.classifier.feature_importances_)
+	if matrix_type == 'snp':
+		np.save(os.path.join(directory,'feature_labels'), labels)
+		np.save(matrix_path, matrix)
 
 	fi = FeatureImportances()
 	fi.set_importances(rf.classifier.feature_importances_)
@@ -193,11 +204,11 @@ if __name__ == '__main__':
 
 	for index in fi.get_most_important_features_indices(n_features):
 		snp_id = labels[index] 
+		print ""
 		print snp_id
 		print 'What proportion of each race or ethnicity has the specific trait?'
 		proportions = getClassProportions(data, classes, index)
 		print dict(proportions)
-		print ""
 		print "What is the distribution of a certain SNP's occurrence over the observed races?"
 		print "First, counts:"
 		counts = getCountsOverClasses(data, classes, index, False)
