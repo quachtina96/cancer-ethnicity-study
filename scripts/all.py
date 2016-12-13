@@ -12,11 +12,10 @@ def main():
     filepath = sys.argv[1] # data/BRCA/BRCA
     cancertype = sys.argv[2]
 
-    matrix_file = filepath + ".data.txt.matrix.npy"
     clinical_file = filepath + "/" + cancertype + ".clinical/" + cancertype + ".clin.merged.picked.txt"
     pval_file = filepath + "_pvals.tsv"
 
-    os.system('python rna.py ' + matrix_file)
+    os.system('python rna.py ' + filepath + ".data.txt")
     os.system('python rna.py ' + clinical_file)
     os.system('python glm.py ' + filepath + " " + cancertype)
     os.system('python fdr.py ' + pval_file)
