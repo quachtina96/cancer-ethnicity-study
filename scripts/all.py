@@ -16,7 +16,7 @@ def main():
     pval_file = filepath + "_pvals.tsv"
 
     os.system('python rna.py ' + filepath + ".data.txt")
-    os.system('python rna.py ' + clinical_file)
+    os.system('python clinical.py ' + clinical_file)
     os.system('python glm.py ' + filepath + " " + cancertype)
     os.system('python fdr.py ' + pval_file)
     os.system('python posthoc.py ' + filepath + " " + cancertype)
