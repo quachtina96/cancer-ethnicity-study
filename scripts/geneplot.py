@@ -1,3 +1,6 @@
+import sys
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -32,7 +35,7 @@ if __name__ == "__main__":
 	if len(sys.argv) < 1:
 		print "you must call program as: python ./geneplot.py <all_caps_cancer_type>"
 		sys.exit(1)
-	
+
 	cancer = sys.argv[1]
 
 	# Get selected SNPs:
@@ -42,8 +45,7 @@ if __name__ == "__main__":
 	with open(os.path.join(minidir,minifile), 'r') as content_file:
 		content = content_file.read()
 	scores, features = read_mini(content)
-	print 'Features'
-	print feature
+
 	selected = features[:20]
 
 	filename = '../data/rna_data/' + cancer + '/'+ cancer
@@ -59,10 +61,6 @@ if __name__ == "__main__":
 			for item in row:
 				genes.append(item)
 				count += 1
-
-	for gene in selected:
-		try:
-			= list(genes).index(gene)
 
 	with open(filename + '.data.txt.patients.csv', 'rb') as f:
 		reader = csv.reader(f)
@@ -132,4 +130,5 @@ if __name__ == "__main__":
 	sns.plt.xticks(rotation=270)
 	sns.plt.tight_layout()
 	sns.plt.savefig(os.path.join(minidir,minifile+'_heatmap.png'))
+
 
