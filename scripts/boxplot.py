@@ -17,7 +17,7 @@ def boxplot(filename, cancer, snp_index, gene):
 	df['expression'] = pd.Series(expression_data, index=master_df.index)
 	ax = sns.boxplot(x="race", y="expression", data=df)
 	ax.set_title("Gene Expression Comparison for " + gene + " for " + cancer + " patient data")
-	sns.plt.savefig(filename + "_boxplot.png")
+	sns.plt.savefig(filename + "_boxplot" + gene +".png")
 
 def main():
 
