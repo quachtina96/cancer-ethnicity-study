@@ -1,5 +1,6 @@
-import matplotlib.pyplot as plt
 import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pickle
@@ -7,7 +8,7 @@ import seaborn as sns
 import csv
 from glm import load_data
 import sys
-matplotlib.use('Agg')
+
 
 def boxplot(filename, cancer, snp_index, gene):
 	data, patients, genes, master_df, clinical, indices_to_delete = load_data(filename, cancer)
