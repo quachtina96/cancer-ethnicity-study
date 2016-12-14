@@ -124,7 +124,12 @@ if __name__ == "__main__":
 
 	ax = sns.heatmap(df, xticklabels = 200)
 
+	ax.set_title(cancer + " Gene Expression Heatmap")
+	ax.vlines([len(white), len(white) + len(asian),
+		len(white) + len(asian) + len(baa),
+		len(white)+len(asian)+len(baa)+len(ai), len(white)+len(asian)+len(baa)+len(ai)+len(na)], *ax.get_ylim())
 	sns.plt.yticks(rotation=0) 
 	sns.plt.xticks(rotation=270)
 	sns.plt.tight_layout()
-	sns.plt.savefig(os.path.join(minidir,minifile+'heatmap.png'))
+	sns.plt.savefig(os.path.join(minidir,minifile+'_heatmap.png'))
+
