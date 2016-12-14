@@ -27,20 +27,20 @@ def read_mini(mini):
 	return (scores,features)
 
 if __name__ == "__main__":
-    """Checks if we have the right number of command line arguments
-       and reads them in"""
-    if len(sys.argv) < 1:
-        print "you must call program as: python ./geneplot.py <all_caps_cancer_type>"
-        sys.exit(1)
-
-    cancer = sys.argv[1]
+	"""Checks if we have the right number of command line arguments
+	   and reads them in"""
+	if len(sys.argv) < 1:
+		print "you must call program as: python ./geneplot.py <all_caps_cancer_type>"
+		sys.exit(1)
+	
+	cancer = sys.argv[1]
 
 	# Get selected SNPs:
 	minidir = '../results/randomforest/rna'
 
 	minifile = cancer + '.rf.selected.txt'
 	with open(os.path.join(minidir,minifile), 'r') as content_file:
-	    content = content_file.read()
+		content = content_file.read()
 	scores, features = read_mini(content)
 	print 'Features'
 	print feature
