@@ -6,7 +6,7 @@ import seaborn as sns
 import csv
 from glm import load_data
 import sys
-
+matplotlib.use('Agg')
 
 def boxplot(filename, cancer, snp_index, gene):
 	data, patients, genes, master_df, clinical, indices_to_delete = load_data(filename, cancer)
