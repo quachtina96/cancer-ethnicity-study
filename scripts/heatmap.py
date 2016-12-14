@@ -7,7 +7,7 @@ import csv
 import sys
 
 def plot_heatmap(filename, cancer):
-	data = np.load(open('../data/' + cancer + '/' + cancer + '.data.txt.matrix.npy'))
+	data = np.load(open(filename + '.data.txt.matrix.npy'))
 	patients = []
 	genes = []
 
