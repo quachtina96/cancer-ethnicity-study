@@ -4,7 +4,7 @@ import sys
 import pandas as pd
 from glm import load_data
 
-def tukey(filename, cancer):
+def tukey(filename, cancer, count):
 	data, patients, genes, master_df, clinical, indices_to_delete = load_data(filename, cancer)
 	items = []
 	outfile = open(filename + '.posthoc.txt', 'w')
@@ -21,7 +21,7 @@ def tukey(filename, cancer):
 	sorted_items = sorted(items,key=lambda x:(x[2],x[0]))
 
 	print 'Items sorted by p-values'
-	for tup in sorted_items[:20]:
+	for tup in sorted_items[:count]:
 		ind = tup[0]
 		expression_data = [item for a, item in enumerate(list(data[ind])) if a not in indices_to_delete]
 		df = master_df.copy()
@@ -41,12 +41,13 @@ def main():
     """Checks if we have the right number of command line arguments
        and reads them in"""
     if len(sys.argv) < 1:
-        print "you must call program as: python ./posthoc.py <datafile> <cancertype>"
+        print "you must call program as: python ./posthoc.py <datafile> <cancertype> <count>"
         sys.exit(1)
 
     filename = sys.argv[1]
     cancer_type = sys.argv[2]
-    tukey(filename, cancer_type)
+    count = int(sys.argv[3])
+    tukey(filename, cancer_type, count)
 
 if __name__ == "__main__":
     main()
